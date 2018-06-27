@@ -4,16 +4,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Respond (c *gin.Context, data interface{}, msg string, err error, code int) {
+type responseData interface {
+	ToResponse () gin.H
+}
+
+func Respond (c *gin.Context, data responseData, msg string, err error, code int) {
 	c.JSON(200, gin.H{
 		"code": code, // success
 		"msg": msg,
-		"data": data,
+		"data": data.ToResponse(),
 		"error": err,
 	})
 }
 
-func RespondSuccess (c *gin.Context, data interface{}, msg string)  {
+func RespondSuccess (c *gin.Context, data responseData, msg string)  {
 	Respond(c, data, msg, nil, 0)
 }
 
