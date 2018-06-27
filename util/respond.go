@@ -1,4 +1,4 @@
-package utils
+package util
 
 import (
 	"github.com/gin-gonic/gin"
@@ -9,11 +9,21 @@ type responseData interface {
 }
 
 func Respond (c *gin.Context, data responseData, msg string, err error, code int) {
+	var resData gin.H
+	if data != nil {
+		resData = data.ToResponse()
+	}
+	var errStr = ""
+
+	if err != nil {
+		errStr = err.Error()
+	}
+
 	c.JSON(200, gin.H{
 		"code": code, // success
 		"msg": msg,
-		"data": data.ToResponse(),
-		"error": err,
+		"data": resData,
+		"error": errStr,
 	})
 }
 

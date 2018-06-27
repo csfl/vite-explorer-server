@@ -1,9 +1,11 @@
 package response
 
+import "math/big"
+
 type SnapshotBlock struct {
 	PrevHash []byte
-	Height string
+	Height *big.Int
 	Producer []byte
 	Snapshot map[string][]byte
-	Amount string
+	Amount *big.Int
 }

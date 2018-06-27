@@ -17,7 +17,6 @@ func registerAccountRouter(engine *gin.Engine) {
 	router := engine.Group("/api/account")
 
 	router.GET("/detail", controllerAccount.Detail)
-
 }
 
 func registerAccountChainRouter(engine *gin.Engine)  {
@@ -30,10 +29,8 @@ func registerAccountChainRouter(engine *gin.Engine)  {
 func registerSnapshotChainRouter(engine *gin.Engine)  {
 	router := engine.Group("/api/snapshotchain")
 
-
 	router.POST("/blocklist", controllerSnapshotchain.BlockList)
 	router.GET("/block", controllerSnapshotchain.Block)
-
 }
 
 func registerTokenRouter (engine *gin.Engine) {

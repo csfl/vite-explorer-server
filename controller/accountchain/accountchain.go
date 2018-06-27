@@ -10,7 +10,7 @@ func BlockList (c *gin.Context)  {
 	var accountchainBlocklistQuery typeRequest.AccountchainBlocklist
 
 	if err := c.BindJSON(&accountchainBlocklistQuery); err != nil {
-		utils.RespondError(c, 400, err)
+		util.RespondError(c, 400, err)
 		return
 	}
 }
