@@ -4,7 +4,6 @@ import (
 	controllerAccount "vite-explorer-server/controller/account"
 	controllerAccountchain "vite-explorer-server/controller/accountchain"
 	controllerSnapshotchain "vite-explorer-server/controller/snapshotchain"
-
 	controllerToken "vite-explorer-server/controller/token"
 
 	"github.com/gin-gonic/gin"

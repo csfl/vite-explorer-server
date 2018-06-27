@@ -2,9 +2,9 @@ package account
 
 import (
 	"github.com/gin-gonic/gin"
-	typeResponse "vite-explorer-server/types/response"
-	typeRequest "vite-explorer-server/types/request"
-	"vite-explorer-server/utils"
+	typeResponse "vite-explorer-server/type/response"
+	typeRequest "vite-explorer-server/type/request"
+	"vite-explorer-server/util"
 )
 
 func Detail(c *gin.Context)  {
@@ -14,6 +14,8 @@ func Detail(c *gin.Context)  {
 		utils.RespondError(c, 400, err)
 		return
 	}
+
+
 
 	utils.RespondSuccess(c, &typeResponse.Account{
 		AccountAddress: "0x123456",
