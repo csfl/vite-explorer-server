@@ -7,6 +7,12 @@
 			"path": "github.com/julienschmidt/httprouter",
 			"revision": "adbc77eec0d91467376ca515bc3a14b8434d0f18",
 			"revisionTime": "2018-04-11T15:45:01Z"
+		},
+		{
+			"checksumSHA1": "EBCORn2h+isoa8VaXj2k27W0w0E=",
+			"path": "github.com/vitelabs/go-vite",
+			"revision": "c29c1b59a6dbe0943505d0df14df234b5406f1d8",
+			"revisionTime": "2018-06-26T12:12:12Z"
 		}
 	],
 	"rootPath": "vite-explorer-server"
