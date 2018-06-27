@@ -1,66 +1,65 @@
 package main
 
 import (
-	"github.com/julienschmidt/httprouter"
-	"net/http"
-	"log"
 	controllerAccount "vite-explorer-server/controller/account"
 	controllerAccountchain "vite-explorer-server/controller/accountchain"
 	controllerSnapshotchain "vite-explorer-server/controller/snapshotchain"
 
 	controllerToken "vite-explorer-server/controller/token"
+
+	"github.com/gin-gonic/gin"
 )
 
 var (
 	port = "8081"
 )
 
-func registerAccountRouter()  {
-	router := httprouter.New()
+func registerAccountRouter(engine *gin.Engine) {
+	router := engine.Group("/api/account")
 
 	router.GET("/detail", controllerAccount.Detail)
 
-	http.Handle("/api/account/", http.StripPrefix("/api/account", router))
-
 }
 
-func registerAccountChainRouter()  {
-	router := httprouter.New()
+func registerAccountChainRouter(engine *gin.Engine)  {
+	router := engine.Group("/api/accountchain")
 
 	router.POST("/blocklist", controllerAccountchain.BlockList)
 	router.GET("/block", controllerAccountchain.Block)
-
-	http.Handle("/api/accountchain/",  http.StripPrefix("/api/accountchain", router))
 }
 
-func registerSnapshotChainRouter()  {
-	router := httprouter.New()
+func registerSnapshotChainRouter(engine *gin.Engine)  {
+	router := engine.Group("/api/snapshotchain")
+
 
 	router.POST("/blocklist", controllerSnapshotchain.BlockList)
 	router.GET("/block", controllerSnapshotchain.Block)
 
-	http.Handle("/api/snapshotchain/", http.StripPrefix("/api/snapshotchain", router))
 }
 
-func registerTokenRouter () {
-	router := httprouter.New()
+func registerTokenRouter (engine *gin.Engine) {
+	router := engine.Group("/api/token")
 
 	router.POST("/list", controllerToken.List)
-
-	http.Handle("/api/token/", http.StripPrefix("/api/token", router))
 }
 
 
 func main ()  {
-	registerAccountRouter()
+	router := gin.New()
 
-	registerAccountChainRouter()
+	// Auto log
+	router.Use(gin.Logger())
 
-	registerSnapshotChainRouter()
+	// Recover from error
+	router.Use(gin.Recovery())
 
-	registerTokenRouter()
+	registerAccountRouter(router)
 
-	log.Println("Server listen in " + port)
+	registerAccountChainRouter(router)
 
-	log.Fatal(http.ListenAndServe(":" + port, nil))
+	registerSnapshotChainRouter(router)
+
+	registerTokenRouter(router)
+
+	router.Run(":" + port)
 }

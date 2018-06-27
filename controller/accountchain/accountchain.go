@@ -1,16 +1,19 @@
 package accountchain
 
 import (
-	"net/http"
-	"github.com/julienschmidt/httprouter"
-	"fmt"
+	"github.com/gin-gonic/gin"
+	"vite-explorer-server/utils"
+	typeRequest "vite-explorer-server/types/request"
 )
 
-func BlockList (w http.ResponseWriter, r *http.Request, _ httprouter.Params)  {
-	fmt.Fprint(w, "accountchain.blocklist")
+func BlockList (c *gin.Context)  {
+	var accountchainBlocklistQuery typeRequest.AccountchainBlocklist
+
+	if err := c.BindJSON(&accountchainBlocklistQuery); err != nil {
+		utils.RespondError(c, 400, err)
+		return
+	}
 }
 
-func Block (w http.ResponseWriter, r *http.Request, _ httprouter.Params)  {
-	fmt.Fprint(w, "accountchain.block")
+func Block (c *gin.Context)  {
 }
-
