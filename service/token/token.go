@@ -5,7 +5,7 @@ import (
 	"github.com/vitelabs/go-vite/ledger"
 )
 
-var tokenAccess = access.TokenAccess{}.New()
+var tokenAccess = access.TokenAccess{}.GetInstance()
 
 func GetToken (tokenId []byte) (*ledger.Token, error) {
 	token, err := tokenAccess.GetByTokenId(tokenId)

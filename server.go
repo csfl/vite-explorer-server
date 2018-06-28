@@ -39,7 +39,6 @@ func registerTokenRouter (engine *gin.Engine) {
 	router.POST("/list", controllerToken.List)
 }
 
-
 func main ()  {
 	router := gin.New()
 

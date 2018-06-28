@@ -5,4 +5,5 @@ import (
 )
 
 func List (c *gin.Context)  {
+
 }
