@@ -2,8 +2,8 @@ package accountchain
 
 import (
 	"github.com/gin-gonic/gin"
-	"vite-explorer-server/util"
-	typeRequest "vite-explorer-server/type/request"
+	"github.com/vitelabs/vite-explorer-server/util"
+	typeRequest "github.com/vitelabs/vite-explorer-server/type/request"
 )
 
 func BlockList (c *gin.Context)  {

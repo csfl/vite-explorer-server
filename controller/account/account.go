@@ -2,10 +2,10 @@ package account
 
 import (
 	"github.com/gin-gonic/gin"
-	typeRequest "vite-explorer-server/type/request"
-	"vite-explorer-server/util"
-	serviceAccount "vite-explorer-server/service/account"
-	serviceToken "vite-explorer-server/service/token"
+	typeRequest "github.com/vitelabs/vite-explorer-server/type/request"
+	"github.com/vitelabs/vite-explorer-server/util"
+	serviceAccount "github.com/vitelabs/vite-explorer-server/service/account"
+	serviceToken "github.com/vitelabs/vite-explorer-server/service/token"
 	"fmt"
 )
 

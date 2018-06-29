@@ -1,8 +1,8 @@
 package account
 
 import (
-	"vite-explorer-server/type/response"
 	"github.com/vitelabs/go-vite/ledger"
+	"github.com/vitelabs/vite-explorer-server/type/response"
 )
 
 func GetAccount (accountAddress []byte) *response.Account{
