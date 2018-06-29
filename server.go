@@ -1,10 +1,10 @@
 package main
 
 import (
-	controllerAccount "vite-explorer-server/controller/account"
-	controllerAccountchain "vite-explorer-server/controller/accountchain"
-	controllerSnapshotchain "vite-explorer-server/controller/snapshotchain"
-	controllerToken "vite-explorer-server/controller/token"
+	controllerAccount "github.com/vitelabs/vite-explorer-server/controller/account"
+	controllerAccountchain "github.com/vitelabs/vite-explorer-server/controller/accountchain"
+	controllerSnapshotchain "github.com/vitelabs/vite-explorer-server/controller/snapshotchain"
+	controllerToken "github.com/vitelabs/vite-explorer-server/controller/token"
 
 	"github.com/gin-gonic/gin"
 )
@@ -38,7 +38,6 @@ func registerTokenRouter (engine *gin.Engine) {
 
 	router.POST("/list", controllerToken.List)
 }
-
 
 func main ()  {
 	router := gin.New()

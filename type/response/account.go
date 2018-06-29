@@ -20,10 +20,21 @@ type Account struct {
 }
 
 func (account *Account) ToResponse () gin.H {
-	return gin.H{
-		"accountAddress": "123",
-		"blockHeight": account.BlockHeight.String(),
-		"TokenList": account.TokenList.String(),
+	//var tokenList
+	//for _, accountToken := range account.TokenList{
+	//	tokenList = append(tokenList, [accountToken, accountToken.Token.ToResponse()])
+	//}
+	//return gin.H{
+	//	"accountAddress": account.AccountAddress,
+	//	"blockHeight": account.BlockHeight.String(),
+	//	"TokenList": tokenList,
+	//}
+	return gin.H{}
+}
+
+func NewAccount () *Account{
+	return &Account{
+
 	}
 }
 

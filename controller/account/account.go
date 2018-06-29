@@ -2,11 +2,9 @@ package account
 
 import (
 	"github.com/gin-gonic/gin"
-	typeRequest "vite-explorer-server/type/request"
-	"vite-explorer-server/util"
-	serviceAccount "vite-explorer-server/service/account"
-	serviceToken "vite-explorer-server/service/token"
-	"vite-explorer-server/service/account"
+	typeRequest "github.com/vitelabs/vite-explorer-server/type/request"
+	"github.com/vitelabs/vite-explorer-server/util"
+	serviceAccount "github.com/vitelabs/vite-explorer-server/service/account"
 )
 
 func Detail(c *gin.Context)  {
@@ -16,7 +14,7 @@ func Detail(c *gin.Context)  {
 		util.RespondError(c, 400, err)
 		return
 	}
-
+	//
 	//account := serviceAccount.GetAccount([]byte{1, 2, 3})
 	//token, err := serviceToken.GetToken([]byte{4, 5, 6})
 	//if err != nil {
@@ -28,9 +26,12 @@ func Detail(c *gin.Context)  {
 	//util.RespondSuccess(c, account, "")
 
 
-	accountAddress := c.Params.ByName(accountAddress)
-
-	account := serviceAccount.GetAccount(accountAddress)
+	accountAddress := make([]byte,3)
+	account, err := serviceAccount.GetAccount(accountAddress)
+	if err != nil {
+		util.RespondFailed(c, 1, err, "")
+		return
+	}
 	util.RespondSuccess(c, account, "")
 
 }
