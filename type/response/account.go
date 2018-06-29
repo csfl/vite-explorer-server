@@ -23,6 +23,7 @@ func (account *Account) ToResponse () gin.H {
 	return gin.H{
 		"accountAddress": "123",
 		"blockHeight": account.BlockHeight.String(),
+		"TokenList": account.TokenList.String(),
 	}
 }
 

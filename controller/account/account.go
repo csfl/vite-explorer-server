@@ -6,7 +6,7 @@ import (
 	"vite-explorer-server/util"
 	serviceAccount "vite-explorer-server/service/account"
 	serviceToken "vite-explorer-server/service/token"
-	"fmt"
+	"vite-explorer-server/service/account"
 )
 
 func Detail(c *gin.Context)  {
@@ -17,13 +17,20 @@ func Detail(c *gin.Context)  {
 		return
 	}
 
-	account := serviceAccount.GetAccount([]byte{1, 2, 3})
-	token, err := serviceToken.GetToken([]byte{4, 5, 6})
-	if err != nil {
-		util.RespondFailed(c, 1, err, "")
-		return
-	}
+	//account := serviceAccount.GetAccount([]byte{1, 2, 3})
+	//token, err := serviceToken.GetToken([]byte{4, 5, 6})
+	//if err != nil {
+	//	util.RespondFailed(c, 1, err, "")
+	//	return
+	//}
+	//
+	//fmt.Println(token)
+	//util.RespondSuccess(c, account, "")
 
-	fmt.Println(token)
+
+	accountAddress := c.Params.ByName(accountAddress)
+
+	account := serviceAccount.GetAccount(accountAddress)
 	util.RespondSuccess(c, account, "")
+
 }
