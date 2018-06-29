@@ -4,10 +4,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/vitelabs/vite-explorer-server/type/request"
 	"github.com/vitelabs/vite-explorer-server/util"
-	"github.com/vitelabs/go-vite/common"
 	tokenService "github.com/vitelabs/vite-explorer-server/service/token"
 	"github.com/vitelabs/vite-explorer-server/type/response"
 	"github.com/vitelabs/go-vite/ledger"
+	"github.com/vitelabs/go-vite/common/types"
 )
 
 func List (c *gin.Context)  {
@@ -41,7 +41,7 @@ func Detail (c *gin.Context) {
 
 	var tokenList *response.TokenList
 	if tokenDetailQuery.TokenId != "" {
-		tokenId, err := common.HexToTokenTypeId(tokenDetailQuery.TokenId)
+		tokenId, err := types.HexToTokenTypeId(tokenDetailQuery.TokenId)
 
 		if err != nil {
 			util.RespondFailed(c, 1, err, "")

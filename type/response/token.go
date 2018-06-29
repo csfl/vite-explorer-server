@@ -4,6 +4,7 @@ import (
 	"math/big"
 	"github.com/vitelabs/go-vite/ledger"
 	"github.com/gin-gonic/gin"
+	"github.com/vitelabs/go-vite/common/types"
 )
 
 type TokenList struct {
@@ -33,7 +34,7 @@ func (t *TokenList) ToResponse () gin.H{
 
 type Token struct {
 	Name string
-	Id []byte
+	Id *types.TokenTypeId
 	Introduction string
 
 	Symbol string
@@ -48,16 +49,14 @@ type Token struct {
 }
 
 func NewToken (ledgerToken *ledger.Token) *Token {
-	return &Token{
-
-	}
+	return &Token{}
 }
 
 func (t*Token) ToResponse () gin.H {
 	return gin.H{
 		"name": t.Name,
+		"id": t.Id.String(),
 		"introduction": t.Introduction,
-
 
 		"symbol": t.Symbol,
 
