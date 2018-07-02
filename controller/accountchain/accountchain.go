@@ -7,12 +7,14 @@ import (
 )
 
 func BlockList (c *gin.Context)  {
-	var accountchainBlocklistQuery typeRequest.AccountchainBlocklist
+	var accountchainBlocklistQuery typeRequest.AccountChainBlocklist
 
 	if err := c.BindJSON(&accountchainBlocklistQuery); err != nil {
 		util.RespondError(c, 400, err)
 		return
 	}
+
+	accountchainBlocklistQuery.PagingSetDefault()
 }
 
 func Block (c *gin.Context)  {
