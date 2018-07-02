@@ -19,7 +19,6 @@ func GetTokenListByTokenSymbol (tokenSymbol string) ([]*ledger.Token, error) {
 	return tokenAccess.GetListByTokenSymbol(tokenSymbol)
 }
 
-
 func GetTokenList (index int, num int, count int) ([]*ledger.Token, error) {
 	return tokenAccess.GetList(index, num, count)
 }

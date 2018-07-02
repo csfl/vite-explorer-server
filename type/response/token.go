@@ -39,17 +39,26 @@ type Token struct {
 
 	Symbol string
 
-	Owner []byte
+	Owner *types.Address
 
 	Decimals int
 
 	TotalSupply *big.Int
-
-	TransactionNumber *big.Int
 }
 
 func NewToken (ledgerToken *ledger.Token) *Token {
-	return &Token{}
+	return &Token{
+		Name: ledgerToken.Mintage.Name,
+		Id: ledgerToken.Mintage.Id,
+		Introduction: ledgerToken.Mintage.Introduction,
+		Symbol: ledgerToken.Mintage.Symbol,
+
+		Owner: ledgerToken.Mintage.Owner,
+
+		Decimals: ledgerToken.Mintage.Decimals,
+
+		TotalSupply: ledgerToken.Mintage.TotalSupply,
+	}
 }
 
 func (t*Token) ToResponse () gin.H {
@@ -59,11 +68,10 @@ func (t*Token) ToResponse () gin.H {
 		"introduction": t.Introduction,
 
 		"symbol": t.Symbol,
+		"owner": t.Owner.String(),
 
 		"decimals": t.Decimals,
 
 		"totalSupply": t.TotalSupply.String(),
-
-		"transactionNumber": t.TransactionNumber.String(),
 	}
 }
