@@ -9,5 +9,5 @@ type AccountChainBlocklist struct {
 }
 
 type AccountChainBlock struct {
-
+	BlockHash string `form:"blockHash" binding:"required"`
 }
