@@ -37,6 +37,7 @@ func registerTokenRouter (engine *gin.Engine) {
 	router := engine.Group("/api/token")
 
 	router.POST("/list", controllerToken.List)
+	router.GET("/detail", controllerToken.Detail)
 }
 
 func main ()  {
