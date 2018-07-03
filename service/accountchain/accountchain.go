@@ -14,11 +14,9 @@ func GetBlockByHash (blockHash []byte) (*ledger.AccountBlock, error){
 	return accountChainAccess.GetBlockByHash(blockHash)
 }
 
-
 func GetBlockListByAccountAddress (index int, num int, count int, accountAddress *types.Address) ([]*ledger.AccountBlock, error){
 	return accountChainAccess.GetBlockListByAccountAddress(index, num, count, accountAddress)
 }
-
 
 func GetBlockListByTokenId (index int, num int, count int, tokenId *types.TokenTypeId) ([]*ledger.AccountBlock, error){
 	return accountChainAccess.GetBlockListByTokenId(index, num, count, tokenId)

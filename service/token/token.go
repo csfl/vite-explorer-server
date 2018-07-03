@@ -3,11 +3,12 @@ package token
 import (
 	"github.com/vitelabs/go-vite/ledger/access"
 	"github.com/vitelabs/go-vite/ledger"
+	"github.com/vitelabs/go-vite/common/types"
 )
 
 var tokenAccess = access.GetTokenAccess()
 
-func GetTokenByTokenId (tokenId []byte) (*ledger.Token, error) {
+func GetTokenByTokenId (tokenId *types.TokenTypeId) (*ledger.Token, error) {
 	return tokenAccess.GetByTokenId(tokenId)
 }
 
