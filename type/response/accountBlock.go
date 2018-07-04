@@ -47,6 +47,8 @@ type AccountBlock struct {
 
 	Status int
 
+	Timestamp uint64
+
 	Balance *big.Int
 
 	Amount *big.Int
@@ -82,6 +84,7 @@ func NewAccountBlock (ledgerBlock *ledger.AccountBlock, confirmInfo gin.H) *Acco
 		Amount: ledgerBlock.Amount,
 		Data: ledgerBlock.Data,
 
+		Timestamp: ledgerBlock.Timestamp,
 		SnapshotTimestamp: ledgerBlock.SnapshotTimestamp,
 		Signature: ledgerBlock.Signature,
 		Nounce: ledgerBlock.Nounce,
@@ -110,6 +113,7 @@ func (ab *AccountBlock) ToResponse () gin.H{
 		"amount": ab.Amount.String(),
 		"data": ab.Data,
 
+		"timestamp": ab.Timestamp,
 		"snapshotTimestamp": hex.EncodeToString(ab.SnapshotTimestamp),
 		"signature": hex.EncodeToString(ab.Signature),
 
@@ -117,6 +121,5 @@ func (ab *AccountBlock) ToResponse () gin.H{
 		"difficulty": hex.EncodeToString(ab.Difficulty),
 
 		"fAmount": ab.FAmount.String(),
-
 	}
 }
