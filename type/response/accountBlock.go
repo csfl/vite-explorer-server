@@ -12,10 +12,10 @@ type AccountBlockList struct {
 	blockList []*AccountBlock
 }
 
-func NewAccountBlockList (ledgerBlockList []*ledger.AccountBlock) *AccountBlockList{
+func NewAccountBlockList (ledgerBlockList []*ledger.AccountBlock, confirmInfoList []gin.H) *AccountBlockList{
 	var blockList []*AccountBlock
-	for _, legerBlock := range ledgerBlockList {
-		blockList = append(blockList, NewAccountBlock(legerBlock))
+	for index, legerBlock := range ledgerBlockList {
+		blockList = append(blockList, NewAccountBlock(legerBlock, confirmInfoList[index]))
 	}
 	return &AccountBlockList{
 		blockList: blockList,
@@ -62,9 +62,13 @@ type AccountBlock struct {
 	Difficulty []byte
 
 	FAmount *big.Int
+
+	ConfirmBlockHash []byte
+
+	ConfirmTimes *big.Int
 }
 
-func NewAccountBlock (ledgerBlock *ledger.AccountBlock) *AccountBlock{
+func NewAccountBlock (ledgerBlock *ledger.AccountBlock, confirmInfo gin.H) *AccountBlock{
 	return &AccountBlock{
 		Height: ledgerBlock.Meta.Height,
 		AccountAddress: ledgerBlock.AccountAddress,
@@ -84,6 +88,10 @@ func NewAccountBlock (ledgerBlock *ledger.AccountBlock) *AccountBlock{
 
 		Difficulty: ledgerBlock.Difficulty,
 		FAmount: ledgerBlock.FAmount,
+
+		ConfirmBlockHash: confirmInfo["ConfirmBlockHash"].([]byte),
+		ConfirmTimes: confirmInfo["ConfirmTimes"].(*big.Int),
+
 	}
 }
 

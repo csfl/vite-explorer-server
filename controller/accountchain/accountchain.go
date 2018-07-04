@@ -55,7 +55,15 @@ func BlockList (c *gin.Context)  {
 		}
 	}
 
-	util.RespondSuccess(c, response.NewAccountBlockList(blockList), "")
+
+	confirmInfoList, err := accountchain.GetConfirmInfoList(blockList)
+
+	if err != nil {
+		util.RespondFailed(c, 6, err, "")
+		return
+	}
+
+	util.RespondSuccess(c, response.NewAccountBlockList(blockList, confirmInfoList), "")
 	return
 
 }
@@ -79,6 +87,13 @@ func Block (c *gin.Context)  {
 		return
 	}
 
-	util.RespondSuccess(c, response.NewAccountBlock(block), "")
+	confirmInfoList, err := accountchain.GetConfirmInfoList([]*ledger.AccountBlock{block})
+
+	if err != nil {
+		util.RespondFailed(c, 3, err, "")
+		return
+	}
+
+	util.RespondSuccess(c, response.NewAccountBlock(block, confirmInfoList[0]), "")
 
 }
