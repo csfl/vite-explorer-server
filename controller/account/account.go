@@ -25,9 +25,7 @@ func Detail(c *gin.Context)  {
 	//fmt.Println(token)
 	//util.RespondSuccess(c, account, "")
 
-
-	accountAddress := make([]byte,3)
-	account, err := serviceAccount.GetAccount(accountAddress)
+	account, err := serviceAccount.GetAccount(accountDetailQuery.AccountAddress)
 	if err != nil {
 		util.RespondFailed(c, 1, err, "")
 		return

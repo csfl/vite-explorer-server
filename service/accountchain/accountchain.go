@@ -5,8 +5,12 @@ import (
 	"math/big"
 )
 
-var accountChainAccess = access.AccountAccess{}.New()
+var accountChainAccess = access.AccountChainAccess{}.New()
 
-func GetAccountBalanceByTokenId(args ...[]byte) (*big.Int, error){
-	return nil, nil
+func GetAccountBalance(keyPartionList ...interface{}) (*big.Int, error){
+	balance, err := accountChainAccess.GetAccountBalance(keyPartionList)
+	if err != nil {
+		return nil, err
+	}
+	return balance, nil
 }
