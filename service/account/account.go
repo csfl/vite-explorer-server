@@ -7,6 +7,7 @@ import (
 	serviceToken "github.com/vitelabs/vite-explorer-server/service/token"
 	serviceAccountChain "github.com/vitelabs/vite-explorer-server/service/accountchain"
 	"math/big"
+	"github.com/vitelabs/go-vite/common/types"
 )
 var accountAccess = access.GetAccountAccess()
 
@@ -42,10 +43,10 @@ func GetAccountTokenList (accountMeta *ledger.AccountMeta) ([]*response.AccountT
 	return accountTokenList, nil
 }
 
-func GetAccountToken (tokenId []byte, accountId *big.Int, blockHeight *big.Int) (*response.AccountToken, error) {
-	token, err := serviceToken.GetTokenByTokenId(tokenId)
-	if err != nil {
-		return nil, err
+func GetAccountToken (tokenId *types.TokenTypeId, accountId *big.Int, blockHeight *big.Int) (*response.AccountToken, error) {
+	token, gtErr := serviceToken.GetTokenByTokenId(tokenId)
+	if gtErr != nil {
+		return nil, gtErr
 	}
 	balance, balanceErr := serviceAccountChain.GetAccountBalance(accountId, blockHeight)
 	if balanceErr != nil {
