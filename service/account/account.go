@@ -4,11 +4,11 @@ import (
 	"github.com/vitelabs/go-vite/ledger/access"
 	"github.com/vitelabs/go-vite/ledger"
 	"github.com/vitelabs/vite-explorer-server/type/response"
-	"github.com/vitelabs/vite-explorer-server/util"
 	serviceToken "github.com/vitelabs/vite-explorer-server/service/token"
 	serviceAccountChain "github.com/vitelabs/vite-explorer-server/service/accountchain"
+	"math/big"
 )
-var accountAccess = access.AccountAccess{}.New()
+var accountAccess = access.GetAccountAccess()
 
 
 func GetAccount (accountAddress string) (*response.Account, error) {
@@ -19,7 +19,6 @@ func GetAccount (accountAddress string) (*response.Account, error) {
 	}
 	accountTokenList, err := GetAccountTokenList(accountMeta)
 	if err != nil {
-		util.RespondFailed(c, 1, err, "")
 		return  nil, err
 	}
 	return &response.Account{
@@ -43,12 +42,12 @@ func GetAccountTokenList (accountMeta *ledger.AccountMeta) ([]*response.AccountT
 	return accountTokenList, nil
 }
 
-func GetAccountToken (tokenId []byte, keyPartionList ...interface{}) (*response.AccountToken, error) {
+func GetAccountToken (tokenId []byte, accountId *big.Int, blockHeight *big.Int) (*response.AccountToken, error) {
 	token, err := serviceToken.GetTokenByTokenId(tokenId)
 	if err != nil {
 		return nil, err
 	}
-	balance, balanceErr := serviceAccountChain.GetAccountBalance(keyPartionList)
+	balance, balanceErr := serviceAccountChain.GetAccountBalance(accountId, blockHeight)
 	if balanceErr != nil {
 		return nil, balanceErr
 	}
