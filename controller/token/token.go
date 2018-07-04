@@ -48,7 +48,7 @@ func Detail (c *gin.Context) {
 			return
 		}
 
-		ledgerToken, err := tokenService.GetTokenByTokenId(tokenId.Bytes())
+		ledgerToken, err := tokenService.GetTokenByTokenId(&tokenId)
 
 		if err != nil {
 			util.RespondFailed(c, 2, err, "")

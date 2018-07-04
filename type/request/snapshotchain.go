@@ -1,9 +1,9 @@
 package request
 
-type SnapshotchainBlocklist struct {
-
+type SnapshotChainBlocklist struct {
+	Paging
 }
 
-type SnapshotchainBlock struct {
-
+type SnapshotChainBlock struct {
+	BlockHash string `form:"blockHahs" binding:"required"`
 }

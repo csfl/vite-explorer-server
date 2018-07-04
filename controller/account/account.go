@@ -31,5 +31,4 @@ func Detail(c *gin.Context)  {
 		return
 	}
 	util.RespondSuccess(c, account, "")
-
 }
