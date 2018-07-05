@@ -8,32 +8,31 @@ import (
 	serviceAccountChain "github.com/vitelabs/vite-explorer-server/service/accountchain"
 	"math/big"
 	"github.com/vitelabs/go-vite/common/types"
+	"github.com/gin-gonic/gin"
+	"github.com/vitelabs/vite-explorer-server/util"
 )
 var accountAccess = access.GetAccountAccess()
 
 
-func GetAccount (accountAddress string) (*response.Account, error) {
+func GetAccount (c *gin.Context, accountAddress *types.Address) (*response.Account, error) {
 	account := &ledger.Account{}
-	accountMeta, err := accountAccess.GetAccountMeta(accountAddress)
+	accountMeta, err:= accountAccess.GetAccountMeta(accountAddress)
 	if err != nil{
+		util.RespondFailed(c, 2, err, "")
 		return nil, err
 	}
-	accountTokenList, err := GetAccountTokenList(accountMeta)
+	accountTokenList, err:= GetAccountTokenList(c, accountMeta)
 	if err != nil {
 		return  nil, err
 	}
-	return &response.Account{
-		AccountAddress: []byte(accountAddress),
-		BlockHeight: account.GetBlockHeight(),
-		TokenList: accountTokenList,
-	}, nil
+	return response.NewAccount(accountAddress, account.BlockHeight, accountTokenList), nil
 }
 
-func GetAccountTokenList (accountMeta *ledger.AccountMeta) ([]*response.AccountToken, error) {
+func GetAccountTokenList (c *gin.Context, accountMeta *ledger.AccountMeta) ([]*response.AccountToken, error) {
 	accountId := accountMeta.AccountId
 	var accountTokenList []*response.AccountToken
 	for _, accountSimpleToken := range accountMeta.TokenList {
-		accountToken, err := GetAccountToken(accountSimpleToken.TokenId, accountId,
+		accountToken, err := GetAccountToken(c, accountSimpleToken.TokenId, accountId,
 			accountSimpleToken.LastAccountBlockHeight)
 		if err != nil {
 			return nil, err
@@ -43,17 +42,16 @@ func GetAccountTokenList (accountMeta *ledger.AccountMeta) ([]*response.AccountT
 	return accountTokenList, nil
 }
 
-func GetAccountToken (tokenId *types.TokenTypeId, accountId *big.Int, blockHeight *big.Int) (*response.AccountToken, error) {
+func GetAccountToken (c *gin.Context, tokenId *types.TokenTypeId, accountId *big.Int, blockHeight *big.Int) (*response.AccountToken, error) {
 	token, gtErr := serviceToken.GetTokenByTokenId(tokenId)
 	if gtErr != nil {
+		util.RespondFailed(c, 3, gtErr, "")
 		return nil, gtErr
 	}
 	balance, balanceErr := serviceAccountChain.GetAccountBalance(accountId, blockHeight)
 	if balanceErr != nil {
+		util.RespondFailed(c, 4, balanceErr, "")
 		return nil, balanceErr
 	}
-	return &response.AccountToken{
-		Token: *response.NewToken(token),
-		Balance: balance.String(),
-	},nil
+	return response.NewAccountToken(token, balance), nil
 }

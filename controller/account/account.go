@@ -5,6 +5,7 @@ import (
 	typeRequest "github.com/vitelabs/vite-explorer-server/type/request"
 	"github.com/vitelabs/vite-explorer-server/util"
 	serviceAccount "github.com/vitelabs/vite-explorer-server/service/account"
+	"github.com/vitelabs/go-vite/common/types"
 )
 
 func Detail(c *gin.Context)  {
@@ -24,11 +25,14 @@ func Detail(c *gin.Context)  {
 	//
 	//fmt.Println(token)
 	//util.RespondSuccess(c, account, "")
-
-	account, err := serviceAccount.GetAccount(accountDetailQuery.AccountAddress)
+	accountAddress, err:= types.HexToAddress(accountDetailQuery.AccountAddress)
 	if err != nil {
 		util.RespondFailed(c, 1, err, "")
 		return
 	}
-	util.RespondSuccess(c, account, "")
+	account, err := serviceAccount.GetAccount(c, &accountAddress)
+	if err != nil {
+		return
+	}
+	util.RespondSuccess(c, account,"")
 }
