@@ -52,10 +52,10 @@ func (sb *SnapshotBlock) ToResponse () gin.H{
 	}
 	return gin.H{
 		"hash": hex.EncodeToString(sb.Hash),
-		"preHash": hex.EncodeToString(sb.PrevHash),
+		"prevHash": hex.EncodeToString(sb.PrevHash),
 		"height": sb.Height.String(),
 		"producer": hex.EncodeToString(sb.Producer),
-		"Snapshot": accountStatusList,
+		"snapshot": accountStatusList,
 		"signature": hex.EncodeToString(sb.Signature),
 		"timestamp": sb.Timestamp,
 		"amount": sb.Amount.String(),
