@@ -27,7 +27,7 @@ func (account *Account) ToResponse () gin.H {
 		hTokenList = append(hTokenList, token.ToResponse())
 	}
 	return gin.H{
-		"accountAddress": account.AccountAddress,
+		"accountAddress": account.AccountAddress.String(),
 		"blockHeight": account.BlockHeight.String(),
 		"TokenList": hTokenList,
 	}
@@ -40,7 +40,7 @@ func (at *AccountToken) ToResponse () gin.H {
 	}
 }
 
-func NewAccount (accountAddress *types.Address, blockHeight *big.Int, accountTokenList []*AccountToken) *Account{
+func NewAccount (accountAddress *types.Address, blockHeight *big.Int, accountTokenList []*AccountToken) *Account {
 	return &Account{
 		AccountAddress: accountAddress,
 		BlockHeight: blockHeight,
@@ -48,7 +48,7 @@ func NewAccount (accountAddress *types.Address, blockHeight *big.Int, accountTok
 	}
 }
 
-func NewAccountToken (token *ledger.Token, balance *big.Int) *AccountToken{
+func NewAccountToken (token *ledger.Token, balance *big.Int) *AccountToken {
 	return &AccountToken{
 		Balance: balance.String(),
 		Token: NewToken(token),
