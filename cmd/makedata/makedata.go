@@ -7,16 +7,11 @@ import (
 )
 
 func main() {
-	//var isInit= false
-	//flag.BoolVar(&isInit, "init", false, "Init ledger")
-	//
-	//flag.Parse()
-	//if isInit {
-	//	writeGenesisBlocks()
-	//}
+	writeGenesisBlocks()
+	writeAccoutChain()
 	//test()
-	//testCompare()
-	//testWrite()
+
+
 }
 
 //func testWrite()  {
@@ -38,6 +33,8 @@ func test () {
 	//fmt.Println()
 	iter := db.Leveldb.NewIterator(util.BytesPrefix(iterKey), nil)
 	//
+	fmt.Println(string(iter.Key()))
+	fmt.Println(iter.Value())
 	for iter.Next() {
 		fmt.Println(string(iter.Key()))
 		fmt.Println(iter.Value())
