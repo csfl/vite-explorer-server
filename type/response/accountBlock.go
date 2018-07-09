@@ -15,7 +15,11 @@ type AccountBlockList struct {
 func NewAccountBlockList (ledgerBlockList []*ledger.AccountBlock, confirmInfoList []gin.H) *AccountBlockList{
 	var blockList []*AccountBlock
 	for index, legerBlock := range ledgerBlockList {
-		blockList = append(blockList, NewAccountBlock(legerBlock, confirmInfoList[index]))
+		var confirmInfo gin.H
+		if confirmInfoList != nil && index < len(confirmInfoList) {
+			confirmInfo =  confirmInfoList[index]
+		}
+		blockList = append(blockList, NewAccountBlock(legerBlock, confirmInfo))
 	}
 	return &AccountBlockList{
 		blockList: blockList,
@@ -40,6 +44,8 @@ type AccountBlock struct {
 	To *types.Address
 
 	From *types.Address
+
+	Hash []byte
 
 	FromHash []byte
 
@@ -71,11 +77,12 @@ type AccountBlock struct {
 }
 
 func NewAccountBlock (ledgerBlock *ledger.AccountBlock, confirmInfo gin.H) *AccountBlock{
-	return &AccountBlock{
+	accountBlock := &AccountBlock{
 		Height: ledgerBlock.Meta.Height,
 		AccountAddress: ledgerBlock.AccountAddress,
 		To: ledgerBlock.To,
 		From: ledgerBlock.From,
+		Hash: ledgerBlock.Hash,
 		FromHash: ledgerBlock.FromHash,
 		PrevHash: ledgerBlock.PrevHash,
 
@@ -91,23 +98,22 @@ func NewAccountBlock (ledgerBlock *ledger.AccountBlock, confirmInfo gin.H) *Acco
 
 		Difficulty: ledgerBlock.Difficulty,
 		FAmount: ledgerBlock.FAmount,
-
-		ConfirmBlockHash: confirmInfo["ConfirmBlockHash"].([]byte),
-		ConfirmTimes: confirmInfo["ConfirmTimes"].(*big.Int),
-
 	}
+
+	if confirmInfo != nil {
+		accountBlock.ConfirmBlockHash = confirmInfo["ConfirmBlockHash"].([]byte)
+		accountBlock.ConfirmTimes = confirmInfo["ConfirmTimes"].(*big.Int)
+	}
+
+	return accountBlock
 }
 
 func (ab *AccountBlock) ToResponse () gin.H{
-	return gin.H{
+	response := gin.H{
 		"height": ab.Height.String(),
 		"accountAddress": ab.AccountAddress.String(),
-		"to": ab.To.String(),
-		"from": ab.From.String(),
-
-		"fromHash": hex.EncodeToString(ab.FromHash),
+		"hash": hex.EncodeToString(ab.Hash),
 		"prevHash": hex.EncodeToString(ab.PrevHash),
-
 		"status": ab.Status,
 		"balance": ab.Balance.String(),
 		"amount": ab.Amount.String(),
@@ -122,4 +128,16 @@ func (ab *AccountBlock) ToResponse () gin.H{
 
 		"fAmount": ab.FAmount.String(),
 	}
+
+	if ab.To != nil {
+		response["to"] = ab.To.String()
+	}
+	if ab.From != nil {
+		response["from"] = ab.From.String()
+	}
+
+	if ab.FromHash != nil {
+		response["fromHash"] = hex.EncodeToString(ab.FromHash)
+	}
+	return response
 }

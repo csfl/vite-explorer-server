@@ -19,7 +19,6 @@ func List (c *gin.Context)  {
 	}
 
 	tokenListQuery.PagingSetDefault()
-
 	ledgerTokenList, err := tokenService.GetTokenList(tokenListQuery.Index, tokenListQuery.Num, tokenListQuery.Count)
 
 	if err != nil {
@@ -27,7 +26,9 @@ func List (c *gin.Context)  {
 		return
 	}
 
+
 	util.RespondSuccess(c, response.NewTokenList(ledgerTokenList), "")
+
 }
 
 func Detail (c *gin.Context) {

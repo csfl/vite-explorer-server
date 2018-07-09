@@ -94,6 +94,10 @@ func Block (c *gin.Context)  {
 		return
 	}
 
-	util.RespondSuccess(c, response.NewAccountBlock(block, confirmInfoList[0]), "")
+	var confirmInfo gin.H
+	if confirmInfoList != nil && len(confirmInfoList) > 0{
+		confirmInfo = confirmInfoList[0]
+	}
+	util.RespondSuccess(c, response.NewAccountBlock(block, confirmInfo), "")
 
 }

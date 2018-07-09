@@ -17,8 +17,13 @@ func GetConfirmInfoList (blockList []*ledger.AccountBlock) ([]gin.H, error) {
 	for _, block := range blockList {
 
 		confirmSnapshotBlock, err:= accountChainAccess.GetConfirmBlock(block)
+
 		if err != nil {
 			return nil, err
+		}
+
+		if confirmSnapshotBlock == nil {
+			return nil, nil
 		}
 
 		confirmTimes, err := accountChainAccess.GetConfirmTimes(confirmSnapshotBlock)
