@@ -35,7 +35,6 @@ func (t *TokenList) ToResponse () gin.H{
 type Token struct {
 	Name string
 	Id *types.TokenTypeId
-	Introduction string
 
 	Symbol string
 
@@ -50,13 +49,10 @@ func NewToken (ledgerToken *ledger.Token) *Token {
 	return &Token{
 		Name: ledgerToken.Mintage.Name,
 		Id: ledgerToken.Mintage.Id,
-		Introduction: ledgerToken.Mintage.Introduction,
 		Symbol: ledgerToken.Mintage.Symbol,
 
 		Owner: ledgerToken.Mintage.Owner,
-
 		Decimals: ledgerToken.Mintage.Decimals,
-
 		TotalSupply: ledgerToken.Mintage.TotalSupply,
 	}
 }
@@ -65,7 +61,6 @@ func (t*Token) ToResponse () gin.H {
 	return gin.H{
 		"name": t.Name,
 		"id": t.Id.String(),
-		"introduction": t.Introduction,
 
 		"symbol": t.Symbol,
 		"owner": t.Owner.String(),

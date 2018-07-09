@@ -43,7 +43,6 @@ func registerTokenRouter (engine *gin.Engine) {
 func main ()  {
 	router := gin.New()
 
-
 	// Auto log
 	router.Use(gin.Logger())
 
