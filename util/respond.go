@@ -3,6 +3,7 @@ package util
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"github.com/vitelabs/vite-explorer-server/vitelog"
 )
 
 type responseData interface {
@@ -33,11 +34,10 @@ func RespondSuccess (c *gin.Context, data responseData, msg string)  {
 }
 
 func RespondFailed (c *gin.Context, code int,err error , msg string)  {
-	logrus.WithFields(logrus.Fields{
+	vitelog.Logger.WithFields(logrus.Fields{
 		"method": c.Request.Method,
 		"url": c.Request.URL,
 		"code": code,
-		"msg": msg,
 	}).Error(err)
 
 	Respond(c, nil, msg, err, code)

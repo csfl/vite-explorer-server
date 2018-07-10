@@ -7,6 +7,9 @@ import (
 	controllerToken "github.com/vitelabs/vite-explorer-server/controller/token"
 
 	"github.com/gin-gonic/gin"
+	"flag"
+	"github.com/vitelabs/vite-explorer-server/config"
+	"github.com/vitelabs/vite-explorer-server/vitelog"
 )
 
 var (
@@ -41,18 +44,21 @@ func registerTokenRouter (engine *gin.Engine) {
 }
 
 func main ()  {
-	//env := config.Get("env")
-	//var env string
-	//var ok bool
-	//if env, ok = options["env"].(string); !ok {
-	//	env = "dev"
-	//}
+	var env string
+	flag.StringVar(&env, "env", "dev", "env info")
+	flag.Parse()
 
-
+	viteconfig.LoadConfig(env)
+	vitelog.InitLogger()
 
 	router := gin.New()
 	// Auto log
-	router.Use(gin.Logger())
+	if env == "production" {
+		gin.SetMode(gin.ReleaseMode)
+		router.Use(gin.LoggerWithWriter(vitelog.Logger.Writer()))
+	} else {
+		router.Use(gin.Logger())
+	}
 
 	// Recover from error
 	router.Use(gin.Recovery())
@@ -65,5 +71,8 @@ func main ()  {
 
 	registerTokenRouter(router)
 
+	vitelog.Logger.Info("Server start listen in " + port)
+
 	router.Run(":" + port)
+
 }

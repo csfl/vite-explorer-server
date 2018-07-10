@@ -1,31 +1,25 @@
-package config
+package viteconfig
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/micro/go-config"
+	"github.com/micro/go-config/source/file"
+)
 
-var baseConfig *gin.H
-
-func mergeConfig (config1, config2 gin.H) (gin.H) {
-	//var newConfig gin.H
-	//for key, value := range config1 {
-	//
-	//}
-	return nil
-}
-
-func InitConfig (env string) {
-	//baseConfig = &{
-	//	"env": "dev",
-	//}
-
-
-}
-
-func Get (key string) (interface{}, bool){
-	//configItem, ok := _config[key]
-	//if !ok {
-	//	return nil, ok
-	//}
-	//
-	//value.
-	return nil, nil
+func LoadConfig (env string)  {
+	if env == "production" {
+		config.Load(
+			file.NewSource(
+				file.WithPath("config/base.json"),
+			),
+			file.NewSource(
+				file.WithPath("config/production.json"),
+			),
+		)
+	} else {
+		config.Load(
+			file.NewSource(
+				file.WithPath("config/base.json"),
+			),
+		)
+	}
 }

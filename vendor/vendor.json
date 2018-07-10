@@ -3,10 +3,28 @@
 	"ignore": "test",
 	"package": [
 		{
+			"checksumSHA1": "7NP1qUMF8Kx1y0zANxx0e+oq9Oo=",
+			"path": "github.com/fsnotify/fsnotify",
+			"revision": "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9",
+			"revisionTime": "2018-01-10T05:33:47Z"
+		},
+		{
 			"checksumSHA1": "GeDZMNp/r9c9Ld/NaK9PQuMN5YU=",
 			"path": "github.com/gin-gonic/gin",
 			"revision": "c00f21ff239822d013b80e54bd403fbc08a0b5ff",
 			"revisionTime": "2018-06-26T10:56:43Z"
+		},
+		{
+			"checksumSHA1": "m2/Bwo4dXYB/Iw2AdotdxuOW7SA=",
+			"path": "github.com/micro/go-config",
+			"revision": "3904282c3ef78454df3c3c0b880fb780778ad16a",
+			"revisionTime": "2018-07-07T08:13:36Z"
+		},
+		{
+			"checksumSHA1": "sH2ehBZuEJh2Ro/Ro4BpehZmu9A=",
+			"path": "github.com/rifflock/lfshook",
+			"revision": "62f5e0662816a462697d29f396fd19376d17f65b",
+			"revisionTime": "2018-03-13T18:34:24Z"
 		},
 		{
 			"checksumSHA1": "93lbwRfMlPivHJ9VF3d/jkpD+Ko=",
