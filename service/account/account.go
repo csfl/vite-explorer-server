@@ -25,7 +25,11 @@ func GetAccount (c *gin.Context, accountAddress *types.Address) (*response.Accou
 	if err != nil {
 		return  nil, err
 	}
-	return response.NewAccount(accountAddress, account.BlockHeight, accountTokenList), nil
+	latestHeight, err := serviceAccountChain.GetLatestBlockHeightByAccountId(accountMeta.AccountId)
+	if err != nil {
+		return nil, err
+	}
+	return response.NewAccount(accountAddress, latestHeight, accountTokenList), nil
 }
 
 func GetAccountTokenList (c *gin.Context, accountMeta *ledger.AccountMeta) ([]*response.AccountToken, error) {

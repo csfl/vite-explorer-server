@@ -13,6 +13,7 @@ func main() {
 	//writeAccoutChain()
 	//test()
 	//writeSnapshotChain()
+	//getSnapshotChainTest()
 }
 
 //func testWrite()  {
