@@ -41,7 +41,7 @@ func writeSnapshotChain()  {
 
 func createSnapshotBlock (hash []byte, prevHash []byte, height *big.Int) *ledger.SnapshotBlock{
 	snapshotBLock := &ledger.SnapshotBlock{
-		Hash: createHash(),
+		Hash: hash,
 		PrevHash: prevHash,
 		Height: height,
 		Producer: createSnapshotBlockProducer(),

@@ -38,12 +38,12 @@ func Block (c *gin.Context)  {
 	}
 	blockHash, err := hex.DecodeString(snapshotChainBlockQuery.BlockHash)
 	if err != nil {
-		util.RespondFailed(c, 1, err, "")
+		util.RespondFailed(c, 2, err, "")
 		return
 	}
 	snapshotBlock, err := serviceSnapshotChain.GetBlock(blockHash)
 	if err != nil {
-		util.RespondFailed(c, 2, err, "")
+		util.RespondFailed(c, 3, err, "")
 		return
 	}
 	util.RespondSuccess(c, response.NewSnapshotBlock(snapshotBlock), "")
