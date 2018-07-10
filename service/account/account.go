@@ -15,17 +15,21 @@ var accountAccess = access.GetAccountAccess()
 
 
 func GetAccount (c *gin.Context, accountAddress *types.Address) (*response.Account, error) {
-	account := &ledger.Account{}
 	accountMeta, err:= accountAccess.GetAccountMeta(accountAddress)
 	if err != nil{
 		util.RespondFailed(c, 2, err, "")
+		return nil, err
+	}
+	accountBLockHeight, err := serviceAccountChain.GetLatestBlockHeightByAccountId(accountMeta.AccountId)
+	if err != nil{
+		util.RespondFailed(c, 3, err, "")
 		return nil, err
 	}
 	accountTokenList, err:= GetAccountTokenList(c, accountMeta)
 	if err != nil {
 		return  nil, err
 	}
-	return response.NewAccount(accountAddress, account.BlockHeight, accountTokenList), nil
+	return response.NewAccount(accountAddress, accountBLockHeight, accountTokenList), nil
 }
 
 func GetAccountTokenList (c *gin.Context, accountMeta *ledger.AccountMeta) ([]*response.AccountToken, error) {
@@ -45,12 +49,12 @@ func GetAccountTokenList (c *gin.Context, accountMeta *ledger.AccountMeta) ([]*r
 func GetAccountToken (c *gin.Context, tokenId *types.TokenTypeId, accountId *big.Int, blockHeight *big.Int) (*response.AccountToken, error) {
 	token, gtErr := serviceToken.GetTokenByTokenId(tokenId)
 	if gtErr != nil {
-		util.RespondFailed(c, 3, gtErr, "")
+		util.RespondFailed(c, 4, gtErr, "")
 		return nil, gtErr
 	}
 	balance, balanceErr := serviceAccountChain.GetAccountBalance(accountId, blockHeight)
 	if balanceErr != nil {
-		util.RespondFailed(c, 4, balanceErr, "")
+		util.RespondFailed(c, 5, balanceErr, "")
 		return nil, balanceErr
 	}
 	return response.NewAccountToken(token, balance), nil

@@ -47,7 +47,7 @@ func createSnapshotBlock (hash []byte, prevHash []byte, height *big.Int) *ledger
 		Producer: createSnapshotBlockProducer(),
 		Snapshot: *createSnapshot(),
 		Signature: createAccountBlockSignature(),
-		Timestamp: uint64(time.Time{}.Unix()),
+		Timestamp: uint64(time.Now().Unix()),
 	}
 	return snapshotBLock
 }
@@ -101,13 +101,15 @@ func getAccountAddressList () []*types.Address {
 }
 
 func getSnapshotChainTest () {
-	snapshotblockchain, gbErr := snapshotblockchain.GetBlockList(0,1,4)
+	snapshotblockchain, gbErr := snapshotblockchain.GetBlockList(0,1,200)
 	if gbErr !=nil {
 		log.Fatal(gbErr)
 	}
 	fmt.Println("Length of the snapshotblockchain: ", len(snapshotblockchain))
 	for _, block := range snapshotblockchain {
-		fmt.Printf("Data{ Height: %d, Hash: %s, PrevHash: %s, Producer: %s }\n",
-			block.Height, string(block.Hash), hex.EncodeToString(block.PrevHash), hex.EncodeToString(block.Producer))
+		fmt.Printf("Hash:%s,\nPrevHash:%s,\nProducer:%s,\nHeight:%s,\nTimestamp:%d,\n\n",
+			hex.EncodeToString(block.Hash), hex.EncodeToString(block.PrevHash),
+			hex.EncodeToString(block.Producer), block.Height, block.Timestamp)
+		//fmt.Println(block.Amount, block.Signature, block.Snapshot)
 	}
 }
