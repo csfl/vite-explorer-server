@@ -47,7 +47,7 @@ func createSnapshotBlock (hash []byte, prevHash []byte, height *big.Int) *ledger
 		Producer: createSnapshotBlockProducer(),
 		Snapshot: *createSnapshot(),
 		Signature: createAccountBlockSignature(),
-		Timestamp: uint64(time.Time{}.Unix()),
+		Timestamp: uint64(time.Now().Unix()),
 	}
 	return snapshotBLock
 }

@@ -41,8 +41,16 @@ func registerTokenRouter (engine *gin.Engine) {
 }
 
 func main ()  {
-	router := gin.New()
+	//env := config.Get("env")
+	//var env string
+	//var ok bool
+	//if env, ok = options["env"].(string); !ok {
+	//	env = "dev"
+	//}
 
+
+
+	router := gin.New()
 	// Auto log
 	router.Use(gin.Logger())
 

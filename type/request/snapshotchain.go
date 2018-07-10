@@ -5,5 +5,5 @@ type SnapshotChainBlocklist struct {
 }
 
 type SnapshotChainBlock struct {
-	BlockHash string `form:"blockHahs" binding:"required"`
+	BlockHash string `form:"blockHash" binding:"required"`
 }

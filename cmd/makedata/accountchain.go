@@ -83,7 +83,7 @@ func createReceiveBlock(prevHash []byte, address *types.Address, fromAddress *ty
 		FromHash: fromBlock.Hash,
 
 		Amount: fromBlock.Amount,
-		Timestamp: uint64(time.Time{}.Unix()),
+		Timestamp: uint64(time.Now().Unix()),
 
 		TokenId: fromBlock.TokenId,
 
@@ -111,7 +111,7 @@ func createSendBlock (prevHash []byte, sendAddress, toAddress *types.Address, am
 		To: toAddress,
 		Amount: big.NewInt(amout),
 
-		Timestamp: uint64(time.Time{}.Unix()),
+		Timestamp: uint64(time.Now().Unix()),
 		TokenId: &ledger.MockViteTokenId,
 
 		Data: "haha" + string(time.Time{}.Unix()),
