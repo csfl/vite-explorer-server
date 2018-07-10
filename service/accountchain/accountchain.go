@@ -58,3 +58,7 @@ func GetBlockList (index int, num int, count int) ([]*ledger.AccountBlock, error
 func GetAccountBalance(accountId *big.Int, blockHeight *big.Int) (*big.Int, error){
 	return accountChainAccess.GetAccountBalance(accountId,blockHeight)
 }
+
+func GetLatestBlockHeightByAccountId (accountId *big.Int) (* big.Int, error){
+	return accountChainAccess.GetLatestBlockHeightByAccountId(accountId)
+}

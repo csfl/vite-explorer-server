@@ -4,6 +4,7 @@ import (
 	"github.com/vitelabs/go-vite/vitedb"
 	"fmt"
 	"github.com/syndtr/goleveldb/leveldb/util"
+	"time"
 )
 
 func main() {
@@ -13,6 +14,10 @@ func main() {
 	writeAccoutChain()
 	//test()
 	writeSnapshotChain()
+
+	time.Sleep(10000)
+	writeSnapshotChain()
+	//getSnapshotChainTest()
 }
 
 //func testWrite()  {
