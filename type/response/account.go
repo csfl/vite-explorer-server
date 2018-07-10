@@ -29,14 +29,14 @@ func (account *Account) ToResponse () gin.H {
 	return gin.H{
 		"accountAddress": account.AccountAddress.String(),
 		"blockHeight": account.BlockHeight.String(),
-		"TokenList": hTokenList,
+		"tokenList": hTokenList,
 	}
 }
 
 func (at *AccountToken) ToResponse () gin.H {
 	return gin.H{
-		"Balance": at.Balance,
-		"Token":   at.Token.ToResponse(),
+		"balance": at.Balance,
+		"token":   at.Token.ToResponse(),
 	}
 }
 
