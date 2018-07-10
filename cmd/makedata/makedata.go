@@ -7,12 +7,12 @@ import (
 )
 
 func main() {
-	//writeGenesisBlocks()
-	//writeGenesisSnapshotBlock()
+	writeGenesisBlocks()
+	writeGenesisSnapshotBlock()
 	//
-	//writeAccoutChain()
+	writeAccoutChain()
 	//test()
-	//writeSnapshotChain()
+	writeSnapshotChain()
 }
 
 //func testWrite()  {

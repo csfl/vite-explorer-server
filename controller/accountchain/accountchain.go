@@ -9,6 +9,7 @@ import (
 	"github.com/vitelabs/go-vite/ledger"
 	"github.com/vitelabs/vite-explorer-server/type/response"
 	"encoding/hex"
+	"github.com/vitelabs/vite-explorer-server/service/token"
 )
 
 func BlockList (c *gin.Context)  {
@@ -24,6 +25,8 @@ func BlockList (c *gin.Context)  {
 	var blockList []*ledger.AccountBlock
 	index, num, count := accountChainBlocklistQuery.Index, accountChainBlocklistQuery.Num, accountChainBlocklistQuery.Count
 
+	var tokenList []*ledger.Token
+
 	if accountChainBlocklistQuery.AccountAddress != "" {
 		accountAddress, err:= types.HexToAddress(accountChainBlocklistQuery.AccountAddress)
 		if err != nil {
@@ -37,6 +40,7 @@ func BlockList (c *gin.Context)  {
 		}
 	} else if accountChainBlocklistQuery.TokenId != "" {
 		tokenId, err := types.HexToTokenTypeId(accountChainBlocklistQuery.TokenId)
+
 		if err != nil {
 			util.RespondFailed(c, 3, err, "")
 			return
@@ -46,12 +50,33 @@ func BlockList (c *gin.Context)  {
 			util.RespondFailed(c, 4, err, "")
 			return
 		}
+
+		tokenInfo, err := token.GetTokenByTokenId(&tokenId)
+		if err != nil {
+			util.RespondFailed(c, 7, err, "")
+		}
+
+		tokenList = make([]*ledger.Token, len(blockList))
+		for index, _ := range tokenList {
+			tokenList[index] = tokenInfo
+		}
 	} else {
 		var err error
 		blockList, err = accountchain.GetBlockList(index, num, count)
 		if err != nil {
 			util.RespondFailed(c, 5, err, "")
 			return
+		}
+	}
+
+	if tokenList == nil {
+		for _, block := range blockList {
+			tokenInfo, err := token.GetTokenByTokenId(block.TokenId)
+			if err != nil {
+				util.RespondFailed(c, 8, err, "")
+			}
+
+			tokenList = append(tokenList, tokenInfo)
 		}
 	}
 
@@ -63,7 +88,7 @@ func BlockList (c *gin.Context)  {
 		return
 	}
 
-	util.RespondSuccess(c, response.NewAccountBlockList(blockList, confirmInfoList), "")
+	util.RespondSuccess(c, response.NewAccountBlockList(blockList, confirmInfoList, tokenList), "")
 	return
 
 }
@@ -98,6 +123,12 @@ func Block (c *gin.Context)  {
 	if confirmInfoList != nil && len(confirmInfoList) > 0{
 		confirmInfo = confirmInfoList[0]
 	}
-	util.RespondSuccess(c, response.NewAccountBlock(block, confirmInfo), "")
+
+	tokenInfo, err := token.GetTokenByTokenId(block.TokenId)
+	if err != nil {
+		util.RespondFailed(c, 4, err, "")
+	}
+
+	util.RespondSuccess(c, response.NewAccountBlock(block, confirmInfo, tokenInfo), "")
 
 }

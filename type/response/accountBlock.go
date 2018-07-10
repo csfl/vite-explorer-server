@@ -12,14 +12,14 @@ type AccountBlockList struct {
 	blockList []*AccountBlock
 }
 
-func NewAccountBlockList (ledgerBlockList []*ledger.AccountBlock, confirmInfoList []gin.H) *AccountBlockList{
+func NewAccountBlockList (ledgerBlockList []*ledger.AccountBlock, confirmInfoList []gin.H, tokenList []*ledger.Token) *AccountBlockList{
 	var blockList []*AccountBlock
 	for index, legerBlock := range ledgerBlockList {
 		var confirmInfo gin.H
 		if confirmInfoList != nil && index < len(confirmInfoList) {
 			confirmInfo =  confirmInfoList[index]
 		}
-		blockList = append(blockList, NewAccountBlock(legerBlock, confirmInfo))
+		blockList = append(blockList, NewAccountBlock(legerBlock, confirmInfo, tokenList[index]))
 	}
 	return &AccountBlockList{
 		blockList: blockList,
@@ -55,6 +55,8 @@ type AccountBlock struct {
 
 	Timestamp uint64
 
+	Token *Token
+
 	Balance *big.Int
 
 	Amount *big.Int
@@ -76,7 +78,11 @@ type AccountBlock struct {
 	ConfirmTimes *big.Int
 }
 
-func NewAccountBlock (ledgerBlock *ledger.AccountBlock, confirmInfo gin.H) *AccountBlock{
+func NewAccountBlock (ledgerBlock *ledger.AccountBlock, confirmInfo gin.H, token *ledger.Token) *AccountBlock{
+	var responseToken *Token
+	if token != nil {
+		responseToken = NewToken(token)
+	}
 	accountBlock := &AccountBlock{
 		Height: ledgerBlock.Meta.Height,
 		AccountAddress: ledgerBlock.AccountAddress,
@@ -85,6 +91,7 @@ func NewAccountBlock (ledgerBlock *ledger.AccountBlock, confirmInfo gin.H) *Acco
 		Hash: ledgerBlock.Hash,
 		FromHash: ledgerBlock.FromHash,
 		PrevHash: ledgerBlock.PrevHash,
+		Token: responseToken,
 
 		Status: ledgerBlock.Meta.Status,
 		Balance: ledgerBlock.Balance,
@@ -104,6 +111,7 @@ func NewAccountBlock (ledgerBlock *ledger.AccountBlock, confirmInfo gin.H) *Acco
 		accountBlock.ConfirmBlockHash = confirmInfo["ConfirmBlockHash"].([]byte)
 		accountBlock.ConfirmTimes = confirmInfo["ConfirmTimes"].(*big.Int)
 	}
+
 
 	return accountBlock
 }
@@ -127,6 +135,9 @@ func (ab *AccountBlock) ToResponse () gin.H{
 		"difficulty": hex.EncodeToString(ab.Difficulty),
 
 		"fAmount": ab.FAmount.String(),
+	}
+	if ab.Token != nil {
+		response["token"] = ab.Token.ToResponse()
 	}
 
 	if ab.To != nil {
