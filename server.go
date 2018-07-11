@@ -74,5 +74,4 @@ func main ()  {
 	vitelog.Logger.Info("Server start listen in " + port)
 
 	router.Run(":" + port)
-
 }

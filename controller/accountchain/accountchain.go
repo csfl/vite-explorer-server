@@ -10,6 +10,8 @@ import (
 	"github.com/vitelabs/vite-explorer-server/type/response"
 	"encoding/hex"
 	"github.com/vitelabs/vite-explorer-server/service/token"
+	"github.com/pkg/errors"
+	"fmt"
 )
 
 func BlockList (c *gin.Context)  {
@@ -20,16 +22,18 @@ func BlockList (c *gin.Context)  {
 		return
 	}
 
-	accountChainBlocklistQuery.PagingSetDefault()
+	accountChainBlocklistQuery.Paging.PagingSetDefault()
 
 	var blockList []*ledger.AccountBlock
-	index, num, count := accountChainBlocklistQuery.Index, accountChainBlocklistQuery.Num, accountChainBlocklistQuery.Count
+	index, num, count := accountChainBlocklistQuery.Paging.Index, accountChainBlocklistQuery.Paging.Num, accountChainBlocklistQuery.Paging.Count
 
 	var tokenList []*ledger.Token
 
 	if accountChainBlocklistQuery.AccountAddress != "" {
 		accountAddress, err:= types.HexToAddress(accountChainBlocklistQuery.AccountAddress)
 		if err != nil {
+			stackErr := errors.WithStack(errors.New(err.Error()))
+			fmt.Println(stackErr)
 			util.RespondFailed(c, 1, err, "")
 			return
 		}
@@ -71,9 +75,15 @@ func BlockList (c *gin.Context)  {
 
 	if tokenList == nil {
 		for _, block := range blockList {
-			tokenInfo, err := token.GetTokenByTokenId(block.TokenId)
-			if err != nil {
-				util.RespondFailed(c, 8, err, "")
+			var tokenInfo *ledger.Token
+			if block.TokenId != nil {
+				var err error
+				tokenInfo, err = token.GetTokenByTokenId(block.TokenId)
+
+				if err != nil {
+					util.RespondFailed(c, 8, err, "")
+					return
+				}
 			}
 
 			tokenList = append(tokenList, tokenInfo)

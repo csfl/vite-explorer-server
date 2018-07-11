@@ -9,6 +9,7 @@ import (
 
 type TokenList struct {
 	tokenList []*Token
+	totalNumber *big.Int
 }
 
 func NewTokenList (tokens []*ledger.Token) *TokenList{
@@ -18,6 +19,7 @@ func NewTokenList (tokens []*ledger.Token) *TokenList{
 	}
 	return &TokenList{
 		tokenList: tokenList,
+		totalNumber: big.NewInt(1),
 	}
 }
 
@@ -29,6 +31,7 @@ func (t *TokenList) ToResponse () gin.H{
 	}
 	return gin.H{
 		"tokenList": tokenList,
+		"totalNumber": t.totalNumber.String(),
 	}
 }
 

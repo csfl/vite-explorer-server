@@ -10,6 +10,7 @@ import (
 
 type AccountBlockList struct {
 	blockList []*AccountBlock
+	totalNumber *big.Int
 }
 
 func NewAccountBlockList (ledgerBlockList []*ledger.AccountBlock, confirmInfoList []gin.H, tokenList []*ledger.Token) *AccountBlockList{
@@ -23,6 +24,7 @@ func NewAccountBlockList (ledgerBlockList []*ledger.AccountBlock, confirmInfoLis
 	}
 	return &AccountBlockList{
 		blockList: blockList,
+		totalNumber: big.NewInt(1000),
 	}
 }
 
@@ -33,6 +35,7 @@ func (abl *AccountBlockList) ToResponse () gin.H{
 	}
 	return gin.H{
 		"blockList": responseBlockList,
+		"totalNumber": abl.totalNumber.String(),
 	}
 }
 
