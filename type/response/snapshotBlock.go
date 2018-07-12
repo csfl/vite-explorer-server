@@ -20,6 +20,11 @@ type SnapshotBlock struct {
 
 type SnapshotBlockList struct {
 	BlockList []*SnapshotBlock
+	ChainHeight *big.Int
+}
+
+type SnapshotChainHeight struct {
+	ChainHeight *big.Int
 }
 
 func NewSnapshotBlock (snapshotBlcok *ledger.SnapshotBlock) *SnapshotBlock {
@@ -35,14 +40,21 @@ func NewSnapshotBlock (snapshotBlcok *ledger.SnapshotBlock) *SnapshotBlock {
 	}
 }
 
-func NewSnapshotBlockList (snapshotBlcok []*ledger.SnapshotBlock) *SnapshotBlockList {
+func NewSnapshotBlockList (snapshotBlcok []*ledger.SnapshotBlock, chainHeight *big.Int) *SnapshotBlockList {
 	var blockList []*SnapshotBlock
 	for _, snapshotBlock := range snapshotBlcok {
 		blockList = append(blockList, NewSnapshotBlock(snapshotBlock))
 	}
 	return &SnapshotBlockList{
 		BlockList: blockList,
+		ChainHeight: chainHeight,
 	}
+}
+
+func NewSnapshotChainHeight (chainHeight *big.Int) * SnapshotChainHeight {
+	return &SnapshotChainHeight{
+		ChainHeight: chainHeight,
+		}
 }
 
 func (sb *SnapshotBlock) ToResponse () gin.H{
@@ -69,5 +81,12 @@ func (sbList *SnapshotBlockList) ToResponse () gin.H  {
 	}
 	return gin.H{
 		"blockList": hSbList,
+		"chainHeight": sbList.ChainHeight.String(),
+	}
+}
+
+func (sch *SnapshotChainHeight) ToResponse () gin.H {
+	return gin.H{
+		"chainHeight": sch.ChainHeight.String(),
 	}
 }

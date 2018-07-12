@@ -35,6 +35,7 @@ func registerSnapshotChainRouter(engine *gin.Engine)  {
 
 	router.POST("/blocklist", controllerSnapshotchain.BlockList)
 	router.GET("/block", controllerSnapshotchain.Block)
+	router.POST("chainheight", controllerSnapshotchain.ChainHeight)
 }
 
 func registerTokenRouter (engine *gin.Engine) {

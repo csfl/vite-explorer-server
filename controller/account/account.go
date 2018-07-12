@@ -6,6 +6,7 @@ import (
 	"github.com/vitelabs/vite-explorer-server/util"
 	serviceAccount "github.com/vitelabs/vite-explorer-server/service/account"
 	"github.com/vitelabs/go-vite/common/types"
+	"errors"
 )
 
 func Detail(c *gin.Context)  {
@@ -15,19 +16,13 @@ func Detail(c *gin.Context)  {
 		util.RespondError(c, 400, err)
 		return
 	}
-	//
-	//account := serviceAccount.GetAccount([]byte{1, 2, 3})
-	//token, err := serviceToken.GetToken([]byte{4, 5, 6})
-	//if err != nil {
-	//	util.RespondFailed(c, 1, err, "")
-	//	return
-	//}
-	//
-	//fmt.Println(token)
-	//util.RespondSuccess(c, account, "")
+	if !types.IsValidHexAddress(accountDetailQuery.AccountAddress) {
+		util.RespondFailed(c, 1, errors.New("AccountAddress is invalid"), "")
+		return
+	}
 	accountAddress, err:= types.HexToAddress(accountDetailQuery.AccountAddress)
 	if err != nil {
-		util.RespondFailed(c, 1, err, "")
+		util.RespondFailed(c, 6, err, "")
 		return
 	}
 	account, err := serviceAccount.GetAccount(c, &accountAddress)
