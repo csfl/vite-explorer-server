@@ -1,0 +1,6 @@
+{
+  "env": "production",
+  "log": {
+    "dirname": "/var/log/vite-explorer-server/"
+  }
+}

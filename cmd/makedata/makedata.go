@@ -8,12 +8,13 @@ import (
 )
 
 func main() {
-	//writeGenesisBlocks()
-	//writeGenesisSnapshotBlock()
+	writeGenesisBlocks()
+	writeGenesisSnapshotBlock()
 	//
-	//writeAccoutChain()
+	writeAccoutChain()
 	//test()
 	writeSnapshotChain()
+
 	time.Sleep(10000)
 	writeSnapshotChain()
 	//getSnapshotChainTest()

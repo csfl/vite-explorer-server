@@ -50,6 +50,7 @@ func writeAccoutChain() {
 	//
 	abs7 := createSendBlock(abr5.Hash, &accountAddress3, &accountAddress2, 1000)
 	abs8 := createSendBlock(abr2.Hash, &accountAddress4, &accountAddress5, 3000)
+	abr6 := createReceiveBlock(nil, &accountAddress2, &ledger.GenesisAccount, abs2)
 	//
 	accountChain = []*ledger.AccountBlock{
 		abs1,
@@ -65,7 +66,23 @@ func writeAccoutChain() {
 		abr5,
 		abs7,
 		abs8,
+		abr6,
 	}
+
+
+	maxCount := 1000
+	prevSendBlock := abs7
+	prevReceiveBlock := abr6
+	for i:=0; i < maxCount - 16; i=i+2 {
+		prevSendBlock = createSendBlock(prevSendBlock.Hash, &accountAddress3, &accountAddress2, 1)
+		block1 := *prevSendBlock
+		accountChain = append(accountChain, &block1)
+
+		prevReceiveBlock = createReceiveBlock(prevReceiveBlock.Hash, &accountAddress2, &accountAddress3, prevSendBlock)
+		block2 := *prevReceiveBlock
+		accountChain = append(accountChain, &block2)
+	}
+
 	err := accountChainAccess.WriteBlockList(accountChain)
 	if err != nil {
 		log.Fatal(err)
@@ -83,7 +100,7 @@ func createReceiveBlock(prevHash []byte, address *types.Address, fromAddress *ty
 		FromHash: fromBlock.Hash,
 
 		Amount: fromBlock.Amount,
-		Timestamp: uint64(time.Time{}.Unix()),
+		Timestamp: uint64(time.Now().Unix()),
 
 		TokenId: fromBlock.TokenId,
 
@@ -111,7 +128,7 @@ func createSendBlock (prevHash []byte, sendAddress, toAddress *types.Address, am
 		To: toAddress,
 		Amount: big.NewInt(amout),
 
-		Timestamp: uint64(time.Time{}.Unix()),
+		Timestamp: uint64(time.Now().Unix()),
 		TokenId: &ledger.MockViteTokenId,
 
 		Data: "haha" + string(time.Time{}.Unix()),
@@ -131,9 +148,14 @@ func createSendBlock (prevHash []byte, sendAddress, toAddress *types.Address, am
 
 
 var blochHashCount = 1
+var blockHashCount2 = 0
 func createBlockHash () []byte{
 	blochHashCount++
-	return []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, byte(blochHashCount)}
+	if blochHashCount >= 256 {
+		blochHashCount = 0
+		blockHashCount2++
+	}
+	return []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, byte(blockHashCount2), byte(blochHashCount)}
 }
 
 

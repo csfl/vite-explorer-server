@@ -1,7 +1,7 @@
 package request
 
 type AccountChainBlocklist struct {
-	Paging `form:"paging" binding:"required"`
+	Paging Paging `form:"paging" binding:"required"`
 
 	AccountAddress string `form:"accountAddress"`
 
