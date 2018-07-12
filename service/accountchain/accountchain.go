@@ -7,10 +7,12 @@ import (
 	"github.com/vitelabs/go-vite/common/types"
 	"math/big"
 	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
 )
 
 
 var accountChainAccess = access.GetAccountChainAccess()
+var errorHeader = "service.accountChain"
 
 func GetConfirmInfoList (blockList []*ledger.AccountBlock) ([]gin.H, error) {
 	var confirmInfoList []gin.H
@@ -19,7 +21,7 @@ func GetConfirmInfoList (blockList []*ledger.AccountBlock) ([]gin.H, error) {
 		confirmSnapshotBlock, err:= accountChainAccess.GetConfirmBlock(block)
 
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, errorHeader + ".GetConfirmInfoList(GetConfirmBlock)")
 		}
 
 		if confirmSnapshotBlock == nil {
@@ -28,7 +30,7 @@ func GetConfirmInfoList (blockList []*ledger.AccountBlock) ([]gin.H, error) {
 
 		confirmTimes, err := accountChainAccess.GetConfirmTimes(confirmSnapshotBlock)
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, errorHeader + ".GetConfirmInfoList(GetConfirmTimes)")
 		}
 		confirmInfoList = append(confirmInfoList, gin.H{
 			"confirmBlockHash": confirmSnapshotBlock.Hash,
@@ -40,25 +42,50 @@ func GetConfirmInfoList (blockList []*ledger.AccountBlock) ([]gin.H, error) {
 }
 
 func GetBlockByHash (blockHash []byte) (*ledger.AccountBlock, error){
-	return accountChainAccess.GetBlockByHash(blockHash)
+	blocks, err := accountChainAccess.GetBlockByHash(blockHash)
+	if err != nil {
+		return nil, errors.Wrap(err, errorHeader + ".GetBlockByHash")
+	}
+
+	return blocks, nil
 }
 
 func GetBlockListByAccountAddress (index int, num int, count int, accountAddress *types.Address) ([]*ledger.AccountBlock, error){
-	return accountChainAccess.GetBlockListByAccountAddress(index, num, count, accountAddress)
+	blocks, err := accountChainAccess.GetBlockListByAccountAddress(index, num, count, accountAddress)
+	if err != nil {
+		return nil, errors.Wrap(err, errorHeader + ".GetBlockListByAccountAddress")
+	}
+	return blocks, nil
 }
 
 func GetBlockListByTokenId (index int, num int, count int, tokenId *types.TokenTypeId) ([]*ledger.AccountBlock, error){
-	return accountChainAccess.GetBlockListByTokenId(index, num, count, tokenId)
+	blocks, err := accountChainAccess.GetBlockListByTokenId(index, num, count, tokenId)
+	if err != nil {
+		return nil, errors.Wrap(err, errorHeader + ".GetBlockListByTokenId")
+	}
+	return blocks, nil
 }
 
 func GetBlockList (index int, num int, count int) ([]*ledger.AccountBlock, error){
-	return accountChainAccess.GetBlockList(index, num, count)
+	blocks, err := accountChainAccess.GetBlockList(index, num, count)
+	if err != nil {
+		return nil, errors.Wrap(err, errorHeader + ".GetBlockList")
+	}
+	return blocks, nil
 }
 
 func GetAccountBalance(accountId *big.Int, blockHeight *big.Int) (*big.Int, error){
-	return accountChainAccess.GetAccountBalance(accountId,blockHeight)
+	balance, err := accountChainAccess.GetAccountBalance(accountId,blockHeight)
+	if err != nil {
+		return nil, errors.Wrap(err, errorHeader + ".GetAccountBalance")
+	}
+	return balance, nil
 }
 
 func GetLatestBlockHeightByAccountId (accountId *big.Int) (* big.Int, error){
-	return accountChainAccess.GetLatestBlockHeightByAccountId(accountId)
+	blockHeight, err := accountChainAccess.GetLatestBlockHeightByAccountId(accountId)
+	if err != nil {
+		return nil, errors.Wrap(err, errorHeader + ".GetLatestBlockHeightByAccountId")
+	}
+	return blockHeight, nil
 }

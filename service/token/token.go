@@ -4,12 +4,18 @@ import (
 	"github.com/vitelabs/go-vite/ledger/access"
 	"github.com/vitelabs/go-vite/ledger"
 	"github.com/vitelabs/go-vite/common/types"
+	"github.com/pkg/errors"
 )
 
 var tokenAccess = access.GetTokenAccess()
+var errorHeader = "service.token"
 
 func GetTokenByTokenId (tokenId *types.TokenTypeId) (*ledger.Token, error) {
-	return tokenAccess.GetByTokenId(tokenId)
+	token, err := tokenAccess.GetByTokenId(tokenId)
+	if err != nil {
+		return nil, errors.Wrap(err, errorHeader + ".GetTokenByTokenId")
+	}
+	return token, err
 }
 
 func GetTokenListByTokenName (tokenName string) ([]*ledger.Token, error) {
