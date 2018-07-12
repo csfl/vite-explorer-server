@@ -9,7 +9,7 @@ import (
 	"math/big"
 	"github.com/vitelabs/go-vite/common/types"
 	"github.com/gin-gonic/gin"
-	"github.com/vitelabs/vite-explorer-server/util"
+	"errors"
 )
 var accountAccess = access.GetAccountAccess()
 
@@ -17,13 +17,11 @@ var accountAccess = access.GetAccountAccess()
 func GetAccount (c *gin.Context, accountAddress *types.Address) (*response.Account, error) {
 	accountMeta, err:= accountAccess.GetAccountMeta(accountAddress)
 	if err != nil{
-		util.RespondFailed(c, 2, err, "")
-		return nil, err
+		return nil, errors.New("Error getting accountMeta.")
 	}
 	accountBLockHeight, err := serviceAccountChain.GetLatestBlockHeightByAccountId(accountMeta.AccountId)
 	if err != nil{
-		util.RespondFailed(c, 3, err, "")
-		return nil, err
+		return nil, errors.New("Error getting account block height (number of trades)")
 	}
 	accountTokenList, err:= GetAccountTokenList(c, accountMeta)
 	if err != nil {
@@ -49,13 +47,11 @@ func GetAccountTokenList (c *gin.Context, accountMeta *ledger.AccountMeta) ([]*r
 func GetAccountToken (c *gin.Context, tokenId *types.TokenTypeId, accountId *big.Int, blockHeight *big.Int) (*response.AccountToken, error) {
 	token, gtErr := serviceToken.GetTokenByTokenId(tokenId)
 	if gtErr != nil {
-		util.RespondFailed(c, 4, gtErr, "")
-		return nil, gtErr
+		return nil, errors.New("Error getting token information")
 	}
 	balance, balanceErr := serviceAccountChain.GetAccountBalance(accountId, blockHeight)
 	if balanceErr != nil {
-		util.RespondFailed(c, 5, balanceErr, "")
-		return nil, balanceErr
+		return nil,errors.New("Error getting current account token balance")
 	}
 	return response.NewAccountToken(token, balance), nil
 }
