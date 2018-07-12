@@ -10,6 +10,7 @@ import (
 	"flag"
 	"github.com/vitelabs/vite-explorer-server/config"
 	"github.com/vitelabs/vite-explorer-server/vitelog"
+	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -56,12 +57,13 @@ func main ()  {
 	if env == "production" {
 		gin.SetMode(gin.ReleaseMode)
 		router.Use(gin.LoggerWithWriter(vitelog.Logger.Writer()))
+		router.Use(gin.RecoveryWithWriter(vitelog.Logger.WriterLevel(logrus.ErrorLevel)))
 	} else {
 		router.Use(gin.Logger())
+		router.Use(gin.Recovery())
 	}
 
 	// Recover from error
-	router.Use(gin.Recovery())
 
 	registerAccountRouter(router)
 

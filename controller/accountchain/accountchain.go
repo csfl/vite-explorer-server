@@ -24,6 +24,7 @@ func BlockList (c *gin.Context)  {
 
 	accountChainBlocklistQuery.Paging.PagingSetDefault()
 
+
 	var blockList []*ledger.AccountBlock
 	index, num, count := accountChainBlocklistQuery.Paging.Index, accountChainBlocklistQuery.Paging.Num, accountChainBlocklistQuery.Paging.Count
 

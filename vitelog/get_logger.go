@@ -21,6 +21,7 @@ func InitLogger () {
 	if Logger == nil {
 		Logger = logrus.New()
 		if env == "production" {
+			log.SetOutput(Logger.Writer())
 			logDir := config.Get("log", "dirname").String("./logs/")
 			infoWriter, err := rotatelogs.New(
 				logDir+"info.log.%Y%m%d",
@@ -43,7 +44,6 @@ func InitLogger () {
 			if err != nil {
 				log.Fatal("GetLogger failed. Error is " + err.Error())
 			}
-
 
 			warnWriter, err := rotatelogs.New(
 				logDir+"error.log.%Y%m%d",
