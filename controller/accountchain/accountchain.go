@@ -93,7 +93,6 @@ func BlockList (c *gin.Context)  {
 
 
 	confirmInfoList, err := accountchain.GetConfirmInfoList(blockList)
-
 	if err != nil {
 		util.RespondFailed(c, 6, err, "")
 		return

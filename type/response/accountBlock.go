@@ -111,8 +111,8 @@ func NewAccountBlock (ledgerBlock *ledger.AccountBlock, confirmInfo gin.H, token
 	}
 
 	if confirmInfo != nil {
-		accountBlock.ConfirmBlockHash = confirmInfo["ConfirmBlockHash"].([]byte)
-		accountBlock.ConfirmTimes = confirmInfo["ConfirmTimes"].(*big.Int)
+		accountBlock.ConfirmBlockHash = confirmInfo["confirmBlockHash"].([]byte)
+		accountBlock.ConfirmTimes = confirmInfo["confirmTimes"].(*big.Int)
 	}
 
 
@@ -138,7 +138,10 @@ func (ab *AccountBlock) ToResponse () gin.H{
 		"difficulty": hex.EncodeToString(ab.Difficulty),
 
 		"fAmount": ab.FAmount.String(),
+		"confirmBlockHash": ab.ConfirmBlockHash,
+		"confirmTimes": ab.ConfirmTimes,
 	}
+
 	if ab.Token != nil {
 		response["token"] = ab.Token.ToResponse()
 	}
