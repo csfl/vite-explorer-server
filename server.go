@@ -5,6 +5,7 @@ import (
 	controllerAccountchain "github.com/vitelabs/vite-explorer-server/controller/accountchain"
 	controllerSnapshotchain "github.com/vitelabs/vite-explorer-server/controller/snapshotchain"
 	controllerToken "github.com/vitelabs/vite-explorer-server/controller/token"
+ 	controllerGeneral "github.com/vitelabs/vite-explorer-server/controller/general"
 
 	"github.com/gin-gonic/gin"
 	"flag"
@@ -35,7 +36,6 @@ func registerSnapshotChainRouter(engine *gin.Engine)  {
 
 	router.POST("/blocklist", controllerSnapshotchain.BlockList)
 	router.GET("/block", controllerSnapshotchain.Block)
-	router.POST("chainheight", controllerSnapshotchain.ChainHeight)
 }
 
 func registerTokenRouter (engine *gin.Engine) {
@@ -43,6 +43,12 @@ func registerTokenRouter (engine *gin.Engine) {
 
 	router.POST("/list", controllerToken.List)
 	router.GET("/detail", controllerToken.Detail)
+}
+
+func registerGeneralRouter (engine *gin.Engine) {
+	router := engine.Group("/api/general")
+
+	router.GET("/detail", controllerGeneral.Detail)
 }
 
 func main ()  {
@@ -73,6 +79,8 @@ func main ()  {
 	registerSnapshotChainRouter(router)
 
 	registerTokenRouter(router)
+
+	registerGeneralRouter(router)
 
 	vitelog.Logger.Info("Server start listen in " + port)
 

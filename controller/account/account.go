@@ -25,7 +25,7 @@ func Detail(c *gin.Context)  {
 		util.RespondFailed(c, 6, err, "")
 		return
 	}
-	account, err := serviceAccount.GetAccount(c, &accountAddress)
+	account, err := serviceAccount.GetAccount(&accountAddress)
 	if err != nil {
 		return
 	}
