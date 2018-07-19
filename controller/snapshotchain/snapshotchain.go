@@ -51,6 +51,7 @@ func Block (c *gin.Context)  {
 		util.RespondFailed(c, 4, err, "")
 		return
 	}
+
 	util.RespondSuccess(c, response.NewSnapshotBlock(snapshotBlock), "")
 }
 
