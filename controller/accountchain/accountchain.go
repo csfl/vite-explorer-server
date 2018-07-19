@@ -12,6 +12,7 @@ import (
 	"github.com/vitelabs/vite-explorer-server/service/token"
 	"github.com/pkg/errors"
 	"fmt"
+	"github.com/vitelabs/go-vite/log"
 	"math/big"
 )
 
@@ -27,7 +28,7 @@ func BlockList (c *gin.Context)  {
 
 	var blockList []*ledger.AccountBlock
 	index, num, count := accountChainBlocklistQuery.Paging.Index, accountChainBlocklistQuery.Paging.Num, accountChainBlocklistQuery.Paging.Count
-
+	log.Info("query for AccountBlockList's [index,num,count]=",index,num,count)
 	var tokenList []*ledger.Token
 	var totalNum *big.Int
 

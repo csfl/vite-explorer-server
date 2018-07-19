@@ -81,12 +81,20 @@ func writeAccoutChain() {
 		prevReceiveBlock = createReceiveBlock(prevReceiveBlock.Hash, &accountAddress2, &accountAddress3, prevSendBlock)
 		block2 := *prevReceiveBlock
 		accountChain = append(accountChain, &block2)
+		if i%4 == 0 {
+			err := accountChainAccess.WriteBlockList(accountChain)
+			if err != nil {
+				log.Fatal(err)
+			}
+			accountChain = nil
+			writeSnapshotChain()
+		}
 	}
 
-	err := accountChainAccess.WriteBlockList(accountChain)
-	if err != nil {
-		log.Fatal(err)
-	}
+	//err := accountChainAccess.WriteBlockList(accountChain)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
 }
 
 

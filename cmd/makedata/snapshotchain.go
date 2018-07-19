@@ -6,10 +6,8 @@ import (
 	"log"
 	"math/big"
 	"time"
-	"fmt"
 	"math/rand"
 	"github.com/vitelabs/go-vite/common/types"
-	"encoding/hex"
 )
 
 var snapshotblockchain = access.GetSnapshotChainAccess()
@@ -45,32 +43,38 @@ func createSnapshotBlock (hash []byte, prevHash []byte, height *big.Int) *ledger
 		PrevHash: prevHash,
 		Height: height,
 		Producer: createSnapshotBlockProducer(),
-		Snapshot: *createSnapshot(),
+		Snapshot: createSnapshot(),
 		Signature: createAccountBlockSignature(),
 		Timestamp: uint64(time.Now().Unix()),
 	}
 	return snapshotBLock
 }
 
-func createSnapshot () *map[string] []byte{
-	var snapshot map[string] []byte
-	snapshot = make(map[string] []byte)
-	accountList, err := snapshotblockchain.GetAccountList()
-	if err != nil {
-		fmt.Println("GetAccountList error")
+func createSnapshot () map[string] []byte{
+	accountList := getAccountAddressList()
+	//fmt.Printf("snapshot count is:%d\n", len(accountList))
+	if accountList == nil {
 		return nil
 	}
-	for _, data := range accountList {
+
+	var snapshot map[string] []byte
+	snapshot = make(map[string] []byte)
+
+	for _, address := range accountList {
 		//fmt.Println("snapshot[", data.String(), "]", data.Bytes())
-		snapshot[data.String()] = data.Bytes()
+		accoutblock, err := accountChainAccess.GetLatestBlockByAccountAddress(address)
+		if err != nil {
+			return nil
+		}
+		snapshot[address.String()] = accoutblock.Hash
 	}
-	return &snapshot
+	return snapshot
 }
 
 
 func createHash () []byte {
 	var letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	b := make([]byte, 18)
+	b := make([]byte, 20)
 	for i := range b {
 		b[i] = letterBytes[rand.Intn(len(letterBytes))]
 	}
@@ -86,30 +90,23 @@ func createSnapshotBlockProducer () []byte {
 }
 
 func getAccountAddressList () []*types.Address {
-	var accountAddressList []*types.Address
-	accountList, err := snapshotblockchain.GetAccountList()
+	accountList, err := accountChainAccess.GetAccountList()
 	if err != nil {
-		fmt.Println("GetAccountList error.")
+		log.Println("GetAccountList error.")
 		return nil
 	}
-	for _, accountAddress := range accountList {
-		accountAddressList = append(accountAddressList, accountAddress)
-		//fmt.Println("accountAddress: ", accountAddress)
-	}
-
-	return accountAddressList
+	return accountList
 }
 
-func getSnapshotChainTest () {
-	snapshotblockchain, gbErr := snapshotblockchain.GetBlockList(0,1,200)
-	if gbErr !=nil {
-		log.Fatal(gbErr)
-	}
-	fmt.Println("Length of the snapshotblockchain: ", len(snapshotblockchain))
-	for _, block := range snapshotblockchain {
-		fmt.Printf("Hash:%s,\nPrevHash:%s,\nProducer:%s,\nHeight:%s,\nTimestamp:%d,\n\n",
-			hex.EncodeToString(block.Hash), hex.EncodeToString(block.PrevHash),
-			hex.EncodeToString(block.Producer), block.Height, block.Timestamp)
-		//fmt.Println(block.Amount, block.Signature, block.Snapshot)
-	}
-}
+//func getSnapshotChainTest () {
+//	snapshotblockchain, gbErr := snapshotblockchain.GetBlockList(0,1,200)
+//	if gbErr !=nil {
+//		log.Fatal(gbErr)
+//	}
+//	//fmt.Println("Length of the snapshotblockchain: ", len(snapshotblockchain))
+//	for _, block := range snapshotblockchain {
+//		fmt.Printf("Hash:%s,\nPrevHash:%s,\nProducer:%s,\nHeight:%s,\nTimestamp:%d,\n\n",
+//			hex.EncodeToString(block.Hash), hex.EncodeToString(block.PrevHash),
+//			hex.EncodeToString(block.Producer), block.Height, block.Timestamp)
+//	}
+//}
