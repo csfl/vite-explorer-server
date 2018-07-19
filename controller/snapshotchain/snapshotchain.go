@@ -8,6 +8,7 @@ import (
 	serviceSnapshotChain "github.com/vitelabs/vite-explorer-server/service/snapshotchain"
 	"github.com/vitelabs/vite-explorer-server/type/response"
 	"encoding/hex"
+	"github.com/vitelabs/go-vite/log"
 )
 
 func BlockList (c *gin.Context)  {
@@ -16,10 +17,11 @@ func BlockList (c *gin.Context)  {
 		util.RespondError(c, 400, err)
 		return
 	}
-	snapshotChainBlockListQuery.PagingSetDefault()
+	snapshotChainBlockListQuery.Paging.PagingSetDefault()
 
 	var blockList []*ledger.SnapshotBlock
-	index, num, count := snapshotChainBlockListQuery.Index, snapshotChainBlockListQuery.Num, snapshotChainBlockListQuery.Count
+	index, num, count := snapshotChainBlockListQuery.Paging.Index, snapshotChainBlockListQuery.Paging.Num, snapshotChainBlockListQuery.Paging.Count
+	log.Info("query for SnapshotChainBlockList's [index,num,count]=",index,num,count)
 	blockList, err := serviceSnapshotChain.GetBlockList(index, num, count)
 	if err != nil {
 		util.RespondFailed(c, 1, err,"")

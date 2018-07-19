@@ -1,7 +1,7 @@
 package request
 
 type SnapshotChainBlocklist struct {
-	Paging
+	Paging Paging `form:"paging" binding:"required"`
 }
 
 type SnapshotChainBlock struct {
