@@ -25,12 +25,12 @@ func BlockList (c *gin.Context)  {
 		util.RespondFailed(c, 1, err,"")
 		return
 	}
-	chainHeight, err := serviceSnapshotChain.GetSnapshotChainHeight()
+	totalNumber, err := serviceSnapshotChain.GetSnapshotChainHeight()
 	if err != nil {
 		util.RespondFailed(c, 2, err, "")
 		return
 	}
-	util.RespondSuccess(c, response.NewSnapshotBlockList(blockList, chainHeight),"")
+	util.RespondSuccess(c, response.NewSnapshotBlockList(blockList, totalNumber),"")
 
 }
 
@@ -53,13 +53,4 @@ func Block (c *gin.Context)  {
 	}
 
 	util.RespondSuccess(c, response.NewSnapshotBlock(snapshotBlock), "")
-}
-
-func ChainHeight (c *gin.Context) {
-	chainHeight, err := serviceSnapshotChain.GetSnapshotChainHeight()
-	if err != nil {
-		util.RespondFailed(c, 2, err, "")
-		return
-	}
-	util.RespondSuccess(c, response.NewSnapshotChainHeight(chainHeight), "")
 }
