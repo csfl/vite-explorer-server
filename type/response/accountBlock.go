@@ -13,7 +13,7 @@ type AccountBlockList struct {
 	totalNumber *big.Int
 }
 
-func NewAccountBlockList (ledgerBlockList []*ledger.AccountBlock, confirmInfoList []gin.H, tokenList []*ledger.Token) *AccountBlockList{
+func NewAccountBlockList (ledgerBlockList []*ledger.AccountBlock, totalNumber *big.Int, confirmInfoList []gin.H, tokenList []*ledger.Token) *AccountBlockList{
 	var blockList []*AccountBlock
 	for index, legerBlock := range ledgerBlockList {
 		var confirmInfo gin.H
@@ -24,7 +24,7 @@ func NewAccountBlockList (ledgerBlockList []*ledger.AccountBlock, confirmInfoLis
 	}
 	return &AccountBlockList{
 		blockList: blockList,
-		totalNumber: big.NewInt(1000),
+		totalNumber: totalNumber,
 	}
 }
 

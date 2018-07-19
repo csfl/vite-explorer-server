@@ -13,6 +13,7 @@ import (
 	"github.com/pkg/errors"
 	"fmt"
 	"github.com/vitelabs/go-vite/log"
+	"math/big"
 )
 
 func BlockList (c *gin.Context)  {
@@ -25,12 +26,13 @@ func BlockList (c *gin.Context)  {
 
 	accountChainBlocklistQuery.Paging.PagingSetDefault()
 
-
 	var blockList []*ledger.AccountBlock
 	index, num, count := accountChainBlocklistQuery.Paging.Index, accountChainBlocklistQuery.Paging.Num, accountChainBlocklistQuery.Paging.Count
 	log.Info("query for AccountBlockList's [index,num,count]=",index,num,count)
 	var tokenList []*ledger.Token
+	var totalNum *big.Int
 
+	// Because there are only one token now, so query transaction list by tokenId and account is not implemented
 	if accountChainBlocklistQuery.AccountAddress != "" {
 		accountAddress, err:= types.HexToAddress(accountChainBlocklistQuery.AccountAddress)
 		if err != nil {
@@ -40,10 +42,21 @@ func BlockList (c *gin.Context)  {
 			return
 		}
 		blockList, err = accountchain.GetBlockListByAccountAddress( index, num, count, &accountAddress)
+
 		if err != nil {
 			util.RespondFailed(c, 2, err, "")
 			return
 		}
+
+		blockHeight, err := accountchain.GetLatestBlockHeightByAccountAddr(&accountAddress)
+
+		if err != nil {
+			util.RespondFailed(c, 9, err, "")
+			return
+		}
+
+		totalNum = blockHeight
+
 	} else if accountChainBlocklistQuery.TokenId != "" {
 		tokenId, err := types.HexToTokenTypeId(accountChainBlocklistQuery.TokenId)
 
@@ -63,12 +76,15 @@ func BlockList (c *gin.Context)  {
 		}
 
 		tokenList = make([]*ledger.Token, len(blockList))
-		for index, _ := range tokenList {
+		for index := range tokenList {
 			tokenList[index] = tokenInfo
 		}
+
+		totalNum = big.NewInt(1000)
 	} else {
 		var err error
 		blockList, err = accountchain.GetBlockList(index, num, count)
+		totalNum = big.NewInt(1000)
 		if err != nil {
 			util.RespondFailed(c, 5, err, "")
 			return
@@ -99,7 +115,7 @@ func BlockList (c *gin.Context)  {
 		return
 	}
 
-	util.RespondSuccess(c, response.NewAccountBlockList(blockList, confirmInfoList, tokenList), "")
+	util.RespondSuccess(c, response.NewAccountBlockList(blockList, totalNum,confirmInfoList, tokenList), "")
 	return
 
 }

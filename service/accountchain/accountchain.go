@@ -11,6 +11,7 @@ import (
 )
 
 
+var accountAccess = access.GetAccountAccess()
 var accountChainAccess = access.GetAccountChainAccess()
 var errorHeader = "service.accountChain"
 
@@ -58,6 +59,7 @@ func GetBlockListByAccountAddress (index int, num int, count int, accountAddress
 	return blocks, nil
 }
 
+
 func GetBlockListByTokenId (index int, num int, count int, tokenId *types.TokenTypeId) ([]*ledger.AccountBlock, error){
 	blocks, err := accountChainAccess.GetBlockListByTokenId(index, num, count, tokenId)
 	if err != nil {
@@ -82,6 +84,13 @@ func GetAccountBalance(accountId *big.Int, blockHeight *big.Int) (*big.Int, erro
 	return balance, nil
 }
 
+func GetLatestBlockHeightByAccountAddr (accountAddress *types.Address) (* big.Int, error){
+	accountMeta, err := accountAccess.GetAccountMeta(accountAddress)
+	if err != nil {
+		return nil, errors.Wrap(err, errorHeader + ".GetLatestBlockHeightByAccountAddr")
+	}
+	return GetLatestBlockHeightByAccountId(accountMeta.AccountId)
+}
 func GetLatestBlockHeightByAccountId (accountId *big.Int) (* big.Int, error){
 	blockHeight, err := accountChainAccess.GetLatestBlockHeightByAccountId(accountId)
 	if err != nil {
