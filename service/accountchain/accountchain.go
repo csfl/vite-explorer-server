@@ -42,7 +42,7 @@ func GetConfirmInfoList (blockList []*ledger.AccountBlock) ([]gin.H, error) {
 	return confirmInfoList, nil
 }
 
-func GetBlockByHash (blockHash []byte) (*ledger.AccountBlock, error){
+func GetBlockByHash (blockHash *types.Hash) (*ledger.AccountBlock, error){
 	blocks, err := accountChainAccess.GetBlockByHash(blockHash)
 	if err != nil {
 		return nil, errors.Wrap(err, errorHeader + ".GetBlockByHash")

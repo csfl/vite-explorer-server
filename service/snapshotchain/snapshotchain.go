@@ -5,12 +5,13 @@ import (
 	"github.com/vitelabs/go-vite/ledger/access"
 	"math/big"
 	"github.com/pkg/errors"
+	"github.com/vitelabs/go-vite/common/types"
 )
 
 var errorHeader = "service.snapshotChain"
 var snapshotChainAccess = access.GetSnapshotChainAccess()
 
-func GetBlock (blockHash []byte) (*ledger.SnapshotBlock, error) {
+func GetBlock (blockHash *types.Hash) (*ledger.SnapshotBlock, error) {
 	snapshotBlock, err := snapshotChainAccess.GetBlockByHash(blockHash)
 	if err != nil {
 		return nil, errors.Wrap(err, errorHeader + ".GetBlock(GetBlockByHash)")

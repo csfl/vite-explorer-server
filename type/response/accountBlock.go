@@ -48,11 +48,11 @@ type AccountBlock struct {
 
 	From *types.Address
 
-	Hash []byte
+	Hash *types.Hash
 
-	FromHash []byte
+	FromHash *types.Hash
 
-	PrevHash []byte
+	PrevHash *types.Hash
 
 	Status int
 
@@ -66,7 +66,7 @@ type AccountBlock struct {
 
 	Data string
 
-	SnapshotTimestamp []byte
+	SnapshotTimestamp *types.Hash
 
 	Signature []byte
 
@@ -123,15 +123,12 @@ func (ab *AccountBlock) ToResponse () gin.H{
 	response := gin.H{
 		"height": ab.Height.String(),
 		"accountAddress": ab.AccountAddress.String(),
-		"hash": hex.EncodeToString(ab.Hash),
-		"prevHash": hex.EncodeToString(ab.PrevHash),
 		"status": ab.Status,
 		"balance": ab.Balance.String(),
 		"amount": ab.Amount.String(),
 		"data": ab.Data,
 
 		"timestamp": ab.Timestamp,
-		"snapshotTimestamp": hex.EncodeToString(ab.SnapshotTimestamp),
 		"signature": hex.EncodeToString(ab.Signature),
 
 		"nounce": hex.EncodeToString(ab.Nounce),
@@ -140,6 +137,14 @@ func (ab *AccountBlock) ToResponse () gin.H{
 		"fAmount": ab.FAmount.String(),
 		"confirmBlockHash": ab.ConfirmBlockHash,
 		"confirmTimes": ab.ConfirmTimes,
+	}
+
+	if ab.Hash != nil {
+		response["hash"] = ab.Hash.String()
+	}
+
+	if ab.PrevHash != nil {
+		response["prevHash"] = ab.PrevHash.String()
 	}
 
 	if ab.Token != nil {
@@ -154,7 +159,11 @@ func (ab *AccountBlock) ToResponse () gin.H{
 	}
 
 	if ab.FromHash != nil {
-		response["fromHash"] = hex.EncodeToString(ab.FromHash)
+		response["fromHash"] = ab.FromHash.String()
+	}
+
+	if ab.SnapshotTimestamp != nil {
+		response["snapshotTimestamp"] = ab.SnapshotTimestamp.String()
 	}
 	return response
 }

@@ -5,14 +5,16 @@ import (
 	"github.com/gin-gonic/gin"
 	"encoding/hex"
 	"github.com/vitelabs/go-vite/ledger"
+	"github.com/vitelabs/go-vite/common/types"
 )
 
 type SnapshotBlock struct {
-	Hash []byte
-	PrevHash []byte
+	Hash *types.Hash
+	PrevHash *types.Hash
 	Height *big.Int
-	Producer []byte
-	Snapshot map[string][]byte
+	Producer *types.Address
+
+	Snapshot map[string]*ledger.SnapshotItem
 	Signature []byte
 	Timestamp uint64
 	Amount *big.Int
@@ -52,15 +54,19 @@ func NewSnapshotBlockList (snapshotBlcok []*ledger.SnapshotBlock, totalNumber *b
 }
 
 func (sb *SnapshotBlock) ToResponse () gin.H{
-	accountStatusList := make(map[string]string)
+	accountStatusList := make(map[string]gin.H)
 	for k, v := range sb.Snapshot {
-		accountStatusList[k] = hex.EncodeToString(v)
+		accountStatusList[k] = gin.H{
+			"accountBlockHash": v.AccountBlockHash,
+			"accountBlockHeight": v.AccountBlockHeight,
+		}
 	}
+
 	return gin.H{
-		"hash": hex.EncodeToString(sb.Hash),
-		"prevHash": hex.EncodeToString(sb.PrevHash),
+		"hash": sb.Hash.String(),
+		"prevHash": sb.PrevHash.String(),
 		"height": sb.Height.String(),
-		"producer": hex.EncodeToString(sb.Producer),
+		"producer": sb.Producer.String(),
 		"snapshot": accountStatusList,
 		"signature": hex.EncodeToString(sb.Signature),
 		"timestamp": sb.Timestamp,

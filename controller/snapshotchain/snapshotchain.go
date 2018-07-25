@@ -7,8 +7,8 @@ import (
 	"github.com/vitelabs/go-vite/ledger"
 	serviceSnapshotChain "github.com/vitelabs/vite-explorer-server/service/snapshotchain"
 	"github.com/vitelabs/vite-explorer-server/type/response"
-	"encoding/hex"
 	"github.com/vitelabs/go-vite/log"
+	"github.com/vitelabs/go-vite/common/types"
 )
 
 func BlockList (c *gin.Context)  {
@@ -43,12 +43,12 @@ func Block (c *gin.Context)  {
 		util.RespondError(c, 400, err)
 		return
 	}
-	blockHash, err := hex.DecodeString(snapshotChainBlockQuery.BlockHash)
+	blockHash, err := types.HexToHash(snapshotChainBlockQuery.BlockHash)
 	if err != nil {
 		util.RespondFailed(c, 3, err, "")
 		return
 	}
-	snapshotBlock, err := serviceSnapshotChain.GetBlock(blockHash)
+	snapshotBlock, err := serviceSnapshotChain.GetBlock(&blockHash)
 	if err != nil {
 		util.RespondFailed(c, 4, err, "")
 		return

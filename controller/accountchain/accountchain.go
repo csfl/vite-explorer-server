@@ -8,7 +8,6 @@ import (
 	"github.com/vitelabs/go-vite/common/types"
 	"github.com/vitelabs/go-vite/ledger"
 	"github.com/vitelabs/vite-explorer-server/type/response"
-	"encoding/hex"
 	"github.com/vitelabs/vite-explorer-server/service/token"
 	"github.com/pkg/errors"
 	"fmt"
@@ -128,12 +127,12 @@ func Block (c *gin.Context)  {
 		return
 	}
 
-	blockHash, err := hex.DecodeString(accountChainBlockQuery.BlockHash)
+	blockHash, err := types.HexToHash(accountChainBlockQuery.BlockHash)
 	if err != nil {
 		util.RespondFailed(c, 1, err, "")
 		return
 	}
-	block, err := accountchain.GetBlockByHash(blockHash)
+	block, err := accountchain.GetBlockByHash(&blockHash)
 	if err != nil {
 		util.RespondFailed(c, 2, err, "")
 		return
