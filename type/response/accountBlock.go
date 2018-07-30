@@ -76,7 +76,7 @@ type AccountBlock struct {
 
 	FAmount *big.Int
 
-	ConfirmBlockHash []byte
+	ConfirmBlockHash *types.Hash
 
 	ConfirmTimes *big.Int
 }
@@ -111,7 +111,7 @@ func NewAccountBlock (ledgerBlock *ledger.AccountBlock, confirmInfo gin.H, token
 	}
 
 	if confirmInfo != nil {
-		accountBlock.ConfirmBlockHash = confirmInfo["confirmBlockHash"].([]byte)
+		accountBlock.ConfirmBlockHash = confirmInfo["confirmBlockHash"].(*types.Hash)
 		accountBlock.ConfirmTimes = confirmInfo["confirmTimes"].(*big.Int)
 	}
 
@@ -133,10 +133,12 @@ func (ab *AccountBlock) ToResponse () gin.H{
 
 		"nounce": hex.EncodeToString(ab.Nounce),
 		"difficulty": hex.EncodeToString(ab.Difficulty),
-
 		"fAmount": ab.FAmount.String(),
-		"confirmBlockHash": ab.ConfirmBlockHash,
 		"confirmTimes": ab.ConfirmTimes,
+	}
+
+	if ab.ConfirmBlockHash != nil {
+		response["confirmBlockHash"] = ab.ConfirmBlockHash.Bytes()
 	}
 
 	if ab.Hash != nil {

@@ -1,4 +1,4 @@
-package main
+package vite_explorer_server
 
 import (
 	controllerAccount "github.com/vitelabs/vite-explorer-server/controller/account"
@@ -8,7 +8,6 @@ import (
  	controllerGeneral "github.com/vitelabs/vite-explorer-server/controller/general"
 
 	"github.com/gin-gonic/gin"
-	"flag"
 	"github.com/vitelabs/vite-explorer-server/config"
 	"github.com/vitelabs/vite-explorer-server/vitelog"
 	"github.com/sirupsen/logrus"
@@ -51,10 +50,8 @@ func registerGeneralRouter (engine *gin.Engine) {
 	router.GET("/detail", controllerGeneral.Detail)
 }
 
-func main ()  {
-	var env string
-	flag.StringVar(&env, "env", "dev", "env info")
-	flag.Parse()
+func StartUp (env string)  {
+
 
 	viteconfig.LoadConfig(env)
 	vitelog.InitLogger()

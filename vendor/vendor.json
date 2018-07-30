@@ -33,10 +33,10 @@
 			"revisionTime": "2018-07-02T05:55:18Z"
 		},
 		{
-			"checksumSHA1": "nb9SOtG/MzpuViiBERSyEp5T5ts=",
+			"checksumSHA1": "ZyU2pon7v6atbyDTd1KnNG1NCQI=",
 			"path": "github.com/vitelabs/go-vite",
-			"revision": "c29c1b59a6dbe0943505d0df14df234b5406f1d8",
-			"revisionTime": "2018-06-26T12:12:12Z"
+			"revision": "08dd11d491f2e2a3d430d4a19937e2a797e606f1",
+			"revisionTime": "2018-07-27T12:05:35Z"
 		}
 	],
 	"rootPath": "github.com/vitelabs/vite-explorer-server"
