@@ -11,6 +11,9 @@ import (
 	"github.com/vitelabs/vite-explorer-server/config"
 	"github.com/vitelabs/vite-explorer-server/vitelog"
 	"github.com/sirupsen/logrus"
+	"github.com/vitelabs/go-vite/vite"
+	"github.com/vitelabs/vite-explorer-server/middlewares"
+	"github.com/vitelabs/go-vite/common/types"
 )
 
 var (
@@ -21,6 +24,7 @@ func registerAccountRouter(engine *gin.Engine) {
 	router := engine.Group("/api/account")
 
 	router.GET("/detail", controllerAccount.Detail)
+	router.POST("/newtesttoken", controllerAccount.NewTestToken)
 }
 
 func registerAccountChainRouter(engine *gin.Engine)  {
@@ -50,13 +54,13 @@ func registerGeneralRouter (engine *gin.Engine) {
 	router.GET("/detail", controllerGeneral.Detail)
 }
 
-func StartUp (env string)  {
-
+func StartUp (env string, vite *vite.Vite)  {
 
 	viteconfig.LoadConfig(env)
 	vitelog.InitLogger()
 
 	router := gin.New()
+
 	// Auto log
 	if env == "production" {
 		gin.SetMode(gin.ReleaseMode)
@@ -67,6 +71,11 @@ func StartUp (env string)  {
 		router.Use(gin.Recovery())
 	}
 
+	// Set vite instance
+	genesisAddr,_ := types.HexToAddress("vite_098dfae02679a4ca05a4c8bf5dd00a8757f0c622bfccce7d68")
+	vite.WalletManager().KeystoreManager.Unlock(genesisAddr, "123456", 0)
+
+	router.Use(middlewares.SetVite(vite, genesisAddr))
 	// Recover from error
 
 	registerAccountRouter(router)

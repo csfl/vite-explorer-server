@@ -21,6 +21,26 @@ type Account struct {
 	TokenList []*AccountToken
 }
 
+
+type NewTestToken struct {
+	Amount *big.Int
+	TokenId types.TokenTypeId
+}
+
+func NewNewTestToken (amount *big.Int, TokenId types.TokenTypeId) *NewTestToken{
+	return &NewTestToken{
+		Amount: amount,
+		TokenId: TokenId,
+	}
+}
+
+func (ntt *NewTestToken) ToResponse () gin.H {
+	return gin.H{
+		"amount": ntt.Amount.String(),
+		"tokenId": ntt.TokenId.String(),
+	}
+}
+
 func (account *Account) ToResponse () gin.H {
 	var hTokenList []gin.H
 	for _, token := range account.TokenList {

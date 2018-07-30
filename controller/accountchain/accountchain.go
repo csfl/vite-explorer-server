@@ -63,6 +63,7 @@ func BlockList (c *gin.Context)  {
 			util.RespondFailed(c, 3, err, "")
 			return
 		}
+
 		blockList, err= accountchain.GetBlockListByTokenId( index, num, count, &tokenId)
 		if err != nil {
 			util.RespondFailed(c, 4, err, "")

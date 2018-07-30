@@ -40,11 +40,11 @@ func main() {
 		MinerInterval: *minerInterval,
 	})
 
-	_, err := vite.New(globalConfig)
+	vite, err := vite.New(globalConfig)
 
 	if err != nil {
 		log.Fatalf("Start vue failed. Error is %v\n", err)
 	}
 
-	vite_explorer_server.StartUp(*env)
+	vite_explorer_server.StartUp(*env, vite)
 }
