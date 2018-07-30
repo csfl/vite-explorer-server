@@ -1,6 +1,5 @@
 package accountchain
 
-
 import (
 	"github.com/vitelabs/go-vite/ledger"
 	"github.com/vitelabs/go-vite/ledger/access"
@@ -9,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 )
-
 
 var accountAccess = access.GetAccountAccess()
 var accountChainAccess = access.GetAccountChainAccess()
@@ -59,7 +57,6 @@ func GetBlockListByAccountAddress (index int, num int, count int, accountAddress
 	return blocks, nil
 }
 
-
 func GetBlockListByTokenId (index int, num int, count int, tokenId *types.TokenTypeId) ([]*ledger.AccountBlock, error){
 	blocks, err := accountChainAccess.GetBlockListByTokenId(index, num, count, tokenId)
 	if err != nil {
@@ -74,6 +71,10 @@ func GetBlockList (index int, num int, count int) ([]*ledger.AccountBlock, error
 		return nil, errors.Wrap(err, errorHeader + ".GetBlockList")
 	}
 	return blocks, nil
+}
+
+func GetTotalNumber () (*big.Int, error) {
+	return accountChainAccess.GetTotalNumber()
 }
 
 func GetAccountBalance(accountId *big.Int, blockHeight *big.Int) (*big.Int, error){
@@ -91,6 +92,7 @@ func GetLatestBlockHeightByAccountAddr (accountAddress *types.Address) (* big.In
 	}
 	return GetLatestBlockHeightByAccountId(accountMeta.AccountId)
 }
+
 func GetLatestBlockHeightByAccountId (accountId *big.Int) (* big.Int, error){
 	blockHeight, err := accountChainAccess.GetLatestBlockHeightByAccountId(accountId)
 	if err != nil {

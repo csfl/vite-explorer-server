@@ -79,15 +79,24 @@ func BlockList (c *gin.Context)  {
 			tokenList[index] = tokenInfo
 		}
 
-		totalNum = big.NewInt(1000)
+		totalNum, err = accountchain.GetTotalNumber()
+		if err != nil {
+			util.RespondFailed(c, 10, err, "")
+		}
 	} else {
 		var err error
 		blockList, err = accountchain.GetBlockList(index, num, count)
-		totalNum = big.NewInt(1000)
 		if err != nil {
 			util.RespondFailed(c, 5, err, "")
 			return
 		}
+
+		totalNum, err = accountchain.GetTotalNumber()
+		if err != nil {
+			util.RespondFailed(c, 11, err, "")
+		}
+
+
 	}
 
 	if tokenList == nil {
