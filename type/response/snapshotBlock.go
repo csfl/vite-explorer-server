@@ -62,9 +62,8 @@ func (sb *SnapshotBlock) ToResponse () gin.H{
 		}
 	}
 
-	return gin.H{
+	response := gin.H{
 		"hash": sb.Hash.String(),
-		"prevHash": sb.PrevHash.String(),
 		"height": sb.Height.String(),
 		"producer": sb.Producer.String(),
 		"snapshot": accountStatusList,
@@ -72,6 +71,11 @@ func (sb *SnapshotBlock) ToResponse () gin.H{
 		"timestamp": sb.Timestamp,
 		"amount": sb.Amount.String(),
 	}
+
+	if sb.PrevHash != nil {
+		response["prevHash"] = sb.PrevHash.String()
+	}
+	return response
 }
 
 func (sbList *SnapshotBlockList) ToResponse () gin.H  {
