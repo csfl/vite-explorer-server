@@ -61,16 +61,19 @@ func NewTestToken (c *gin.Context) {
 	vite := c.MustGet("vite").(*vite.Vite)
 	genesisAddr := c.MustGet("genesisAddr").(types.Address)
 	amount := big.NewInt(100)
+	for i := 0; i < 18; i++ {
+		amount.Mul(amount, big.NewInt(10))
+	}
 
-	creatTxErr := vite.Ledger().Ac().CreateTx(&ledger.AccountBlock{
+	createTxErr := vite.Ledger().Ac().CreateTx(&ledger.AccountBlock{
 		AccountAddress: &genesisAddr,
 		To: &toAddr,
 		TokenId: &ledger.MockViteTokenId,
 		Amount: amount,
 	})
 
-	if creatTxErr != nil {
-		util.RespondFailed(c, 2, errors.New("Create transaction failed. Error is " + creatTxErr.Error()), "")
+	if createTxErr != nil {
+		util.RespondFailed(c, 2, errors.New("Create transaction failed. Error is " + createTxErr.Error()), "")
 		return
 	}
 	util.RespondSuccess(c, response.NewNewTestToken(amount, ledger.MockViteTokenId),"")
