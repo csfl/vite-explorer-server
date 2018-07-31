@@ -2,3 +2,4 @@
 .DS_Store
 vite_leveldb_database
 server
+vite-explorer-server
