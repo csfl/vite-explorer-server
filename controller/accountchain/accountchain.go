@@ -129,7 +129,7 @@ func BlockList (c *gin.Context)  {
 		return
 	}
 
-	util.RespondSuccess(c, response.NewAccountBlockList(blockList, totalNum,confirmInfoList, tokenList), "")
+	util.RespondSuccess(c, response.NewAccountBlockList(blockList, totalNum, confirmInfoList, tokenList), "")
 	return
 
 }

@@ -16,13 +16,14 @@ var errorHeader = "service.accountChain"
 func GetConfirmInfoList (blockList []*ledger.AccountBlock) ([]gin.H, error) {
 	var confirmInfoList []gin.H
 	for _, block := range blockList {
-
 		confirmSnapshotBlock, err:= accountChainAccess.GetConfirmBlock(block)
+
 		if err != nil {
 			return nil, errors.Wrap(err, errorHeader + ".GetConfirmInfoList(GetConfirmBlock)")
 		}
 
 		if confirmSnapshotBlock == nil {
+			confirmInfoList = append(confirmInfoList, nil)
 			continue
 		}
 

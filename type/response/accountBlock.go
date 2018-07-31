@@ -20,6 +20,7 @@ func NewAccountBlockList (ledgerBlockList []*ledger.AccountBlock, totalNumber *b
 		if confirmInfoList != nil && index < len(confirmInfoList) {
 			confirmInfo =  confirmInfoList[index]
 		}
+
 		blockList = append(blockList, NewAccountBlock(legerBlock, confirmInfo, tokenList[index]))
 	}
 	return &AccountBlockList{
@@ -138,7 +139,7 @@ func (ab *AccountBlock) ToResponse () gin.H{
 	}
 
 	if ab.ConfirmBlockHash != nil {
-		response["confirmBlockHash"] = ab.ConfirmBlockHash.Bytes()
+		response["confirmBlockHash"] = ab.ConfirmBlockHash.String()
 	}
 
 	if ab.Hash != nil {
