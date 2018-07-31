@@ -11,6 +11,9 @@ import (
 	"github.com/vitelabs/go-vite/ledger"
 	"math/big"
 	"github.com/vitelabs/vite-explorer-server/type/response"
+	"github.com/vitelabs/vite-explorer-server/vitelog"
+	errors2 "github.com/pkg/errors"
+
 )
 
 func Detail(c *gin.Context)  {
@@ -25,15 +28,20 @@ func Detail(c *gin.Context)  {
 		util.RespondFailed(c, 1, errors.New("AccountAddress is invalid"), "")
 		return
 	}
+
 	accountAddress, err:= types.HexToAddress(accountDetailQuery.AccountAddress)
 	if err != nil {
 		util.RespondFailed(c, 6, err, "")
 		return
 	}
+
 	account, err := serviceAccount.GetAccount(&accountAddress)
 	if err != nil {
+		vitelog.Logger.Error(errors2.Wrap(err, "accountController.detail"))
+		util.RespondSuccess(c, nil,"")
 		return
 	}
+
 	util.RespondSuccess(c, account,"")
 }
 
