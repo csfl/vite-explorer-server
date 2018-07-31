@@ -56,17 +56,23 @@ func BlockList (c *gin.Context)  {
 
 		totalNum = blockHeight
 
-	} else if accountChainBlocklistQuery.TokenId != "" {
-		tokenId, err := types.HexToTokenTypeId(accountChainBlocklistQuery.TokenId)
-
-		if err != nil {
-			util.RespondFailed(c, 3, err, "")
-			return
+	} else  {
+		var tokenId types.TokenTypeId
+		if accountChainBlocklistQuery.TokenId == "" {
+			tokenId = ledger.MockViteTokenId
+		} else {
+			var err error
+			tokenId, err = types.HexToTokenTypeId(accountChainBlocklistQuery.TokenId)
+			if err != nil {
+				util.RespondFailed(c, 3, err, "")
+				return
+			}
 		}
 
-		blockList, err= accountchain.GetBlockListByTokenId( index, num, count, &tokenId)
-		if err != nil {
-			util.RespondFailed(c, 4, err, "")
+		var getErr error
+		blockList, getErr = accountchain.GetBlockListByTokenId( index, num, count, &tokenId)
+		if getErr != nil {
+			util.RespondFailed(c, 4, getErr, "")
 			return
 		}
 
@@ -84,21 +90,20 @@ func BlockList (c *gin.Context)  {
 		if err != nil {
 			util.RespondFailed(c, 10, err, "")
 		}
-	} else {
-		var err error
-		blockList, err = accountchain.GetBlockList(index, num, count)
-		if err != nil {
-			util.RespondFailed(c, 5, err, "")
-			return
-		}
-
-		totalNum, err = accountchain.GetTotalNumber()
-		if err != nil {
-			util.RespondFailed(c, 11, err, "")
-		}
-
-
 	}
+
+	// Fixme
+	//var err error
+	//blockList, err = accountchain.GetBlockList(index, num, count)
+	//if err != nil {
+	//	util.RespondFailed(c, 5, err, "")
+	//	return
+	//}
+	//
+	//totalNum, err = accountchain.GetTotalNumber()
+	//if err != nil {
+	//	util.RespondFailed(c, 11, err, "")
+	//}
 
 	if tokenList == nil {
 		for _, block := range blockList {

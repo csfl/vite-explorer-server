@@ -60,6 +60,7 @@ func NewTestToken (c *gin.Context) {
 		TokenId: &ledger.MockViteTokenId,
 		Amount: amount,
 	})
+
 	if creatTxErr != nil {
 		util.RespondFailed(c, 2, errors.New("Create transaction failed. Error is " + creatTxErr.Error()), "")
 		return
