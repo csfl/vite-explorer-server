@@ -125,8 +125,6 @@ func (ab *AccountBlock) ToResponse () gin.H{
 		"height": ab.Height.String(),
 		"accountAddress": ab.AccountAddress.String(),
 		"status": ab.Status,
-		"balance": ab.Balance.String(),
-		"amount": ab.Amount.String(),
 		"data": ab.Data,
 
 		"timestamp": ab.Timestamp,
@@ -136,6 +134,13 @@ func (ab *AccountBlock) ToResponse () gin.H{
 		"difficulty": hex.EncodeToString(ab.Difficulty),
 		"fAmount": ab.FAmount.String(),
 		"confirmTimes": ab.ConfirmTimes,
+	}
+
+	if ab.Balance != nil {
+		response["balance"] = ab.Balance.String()
+	}
+	if ab.Amount != nil {
+		response["amount"] = ab.Amount.String()
 	}
 
 	if ab.ConfirmBlockHash != nil {
