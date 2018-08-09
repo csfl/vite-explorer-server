@@ -4,8 +4,8 @@ import (
 	"flag"
 	"github.com/vitelabs/go-vite/config"
 	"github.com/vitelabs/go-vite/vite"
-	"log"
 	"github.com/vitelabs/vite-explorer-server"
+	"github.com/vitelabs/go-vite/log15"
 )
 
 var (
@@ -21,6 +21,8 @@ var (
 )
 
 func main() {
+
+	mainLog := log15.New("module", "gvite/main")
 
 	flag.Parse()
 
@@ -40,10 +42,16 @@ func main() {
 		MinerInterval: *minerInterval,
 	})
 
+	if s, e := config.GlobalConfig.RunLogDirFile(); e == nil {
+		log15.Root().SetHandler(
+			log15.LvlFilterHandler(log15.LvlInfo, log15.Must.FileHandler(s, log15.TerminalFormat())),
+		)
+	}
+
 	vite, err := vite.New(globalConfig)
 
 	if err != nil {
-		log.Fatalf("Start vue failed. Error is %v\n", err)
+		mainLog.Crit("Start vite failed.", "err", err)
 	}
 
 	vite_explorer_server.StartUp(*env, vite)
