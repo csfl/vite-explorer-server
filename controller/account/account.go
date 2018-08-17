@@ -14,6 +14,7 @@ import (
 	"github.com/vitelabs/vite-explorer-server/vitelog"
 	errors2 "github.com/pkg/errors"
 
+	"math/rand"
 )
 
 func Detail(c *gin.Context)  {
@@ -61,7 +62,11 @@ func NewTestToken (c *gin.Context) {
 	toAddr, _ := types.HexToAddress(accountNewTestToken.AccountAddress)
 	vite := c.MustGet("vite").(*vite.Vite)
 	genesisAddr := c.MustGet("genesisAddr").(types.Address)
-	amount := big.NewInt(100)
+	randomAmount := rand.Intn(150)
+
+	amount := big.NewInt(50)
+	amount.Add(amount, big.NewInt(int64(randomAmount)))
+
 	for i := 0; i < 18; i++ {
 		amount.Mul(amount, big.NewInt(10))
 	}
