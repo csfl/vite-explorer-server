@@ -9,16 +9,25 @@ import (
 )
 
 var (
-	nameFlag  = flag.String("name", "", "boot name")
-	sigFlag   = flag.String("sig", "", "boot sig")
-	maxPeers  = flag.Uint("maxpeers", 0, "max number of connections will be connected")
-	passRatio = flag.Uint("passration", 0, "max passive connections will be connected")
-
-	minerFlag     = flag.Bool("miner", false, "boot miner")
-	minerInterval = flag.Int("minerInterval", 6, "miner interval(unit sec).")
-	coinbaseFlag  = flag.String("coinbaseAddress", "", "boot coinbaseAddress")
 	env = flag.String( "env", "dev", "env info")
 )
+
+func parseConfig() *config.Config {
+	var globalConfig = config.GlobalConfig
+
+	flag.StringVar(&globalConfig.Name, "name", globalConfig.Name, "boot name")
+	flag.UintVar(&globalConfig.MaxPeers, "peers", globalConfig.MaxPeers, "max number of connections will be connected")
+	flag.StringVar(&globalConfig.Addr, "addr", globalConfig.Addr, "will be listen by vite")
+	flag.StringVar(&globalConfig.PrivateKey, "priv", globalConfig.PrivateKey, "hex encode of ed25519 privateKey, use for sign message")
+	flag.StringVar(&globalConfig.DataDir, "dir", globalConfig.DataDir, "use for store all files")
+	flag.UintVar(&globalConfig.NetID, "netid", globalConfig.NetID, "the network vite will connect")
+
+	flag.Parse()
+
+	globalConfig.P2P.Datadir = globalConfig.DataDir
+
+	return globalConfig
+}
 
 func main() {
 
@@ -26,29 +35,15 @@ func main() {
 
 	flag.Parse()
 
-	globalConfig := config.GlobalConfig
+	parsedConfig := parseConfig()
 
-	globalConfig.P2P = config.MergeP2PConfig(&config.P2P{
-		Name:                 *nameFlag,
-		Sig:                  *sigFlag,
-		MaxPeers:             uint32(*maxPeers),
-		MaxPassivePeersRatio: uint32(*passRatio),
-	})
-	globalConfig.P2P.Datadir = globalConfig.DataDir
-
-	globalConfig.Miner = config.MergeMinerConfig(&config.Miner{
-		Miner:         *minerFlag,
-		Coinbase:      *coinbaseFlag,
-		MinerInterval: *minerInterval,
-	})
-
-	if s, e := config.GlobalConfig.RunLogDirFile(); e == nil {
+	if s, e := parsedConfig.RunLogDirFile(); e == nil {
 		log15.Root().SetHandler(
 			log15.LvlFilterHandler(log15.LvlInfo, log15.Must.FileHandler(s, log15.TerminalFormat())),
 		)
 	}
 
-	vite, err := vite.New(globalConfig)
+	vite, err := vite.New(parsedConfig)
 
 	if err != nil {
 		mainLog.Crit("Start vite failed.", "err", err)
