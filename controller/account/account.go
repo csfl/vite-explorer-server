@@ -31,6 +31,7 @@ func Detail(c *gin.Context)  {
 	}
 
 	accountAddress, err:= types.HexToAddress(accountDetailQuery.AccountAddress)
+
 	if err != nil {
 		util.RespondFailed(c, 6, err, "")
 		return
@@ -60,11 +61,6 @@ func NewTestToken (c *gin.Context) {
 	}
 
 	toAddr, _ := types.HexToAddress(accountNewTestToken.AccountAddress)
-
-	if !util.CheckApiLimit(toAddr) {
-		util.RespondFailed(c, 3, errors.New("Create transaction failed. Don't fetch too quickly"), "")
-		return
-	}
 
 	vite := c.MustGet("vite").(*vite.Vite)
 	genesisAddr := c.MustGet("genesisAddr").(types.Address)

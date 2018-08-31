@@ -14,6 +14,8 @@ import (
 	"github.com/vitelabs/go-vite/vite"
 	"github.com/vitelabs/vite-explorer-server/middlewares"
 	"github.com/vitelabs/go-vite/common/types"
+	"path"
+	"github.com/vitelabs/go-vite/common"
 )
 
 var (
@@ -74,6 +76,8 @@ func StartUp (env string, vite *vite.Vite)  {
 	// Set vite instance
 	genesisAddr,_ := types.HexToAddress("vite_098dfae02679a4ca05a4c8bf5dd00a8757f0c622bfccce7d68")
 	vite.WalletManager().KeystoreManager.Unlock(genesisAddr, "123456", 0)
+
+	router.StaticFile("/ledger", path.Join(common.DefaultDataDir(), "ledger.zip"))
 
 	router.Use(middlewares.SetVite(vite, genesisAddr))
 	// Recover from error
