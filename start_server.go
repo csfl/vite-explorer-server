@@ -16,6 +16,9 @@ import (
 	"github.com/vitelabs/go-vite/common/types"
 	"path"
 	"github.com/vitelabs/go-vite/common"
+	_ "expvar"
+	"net"
+	"net/http"
 )
 
 var (
@@ -56,7 +59,19 @@ func registerGeneralRouter (engine *gin.Engine) {
 	router.GET("/detail", controllerGeneral.Detail)
 }
 
+func StartMonitorHttp ()  {
+	sock, err := net.Listen("tcp", "localhost:6060")
+	if err != nil {
+		panic("error")
+	}
+	go func() {
+		http.Serve(sock, nil)
+	}()
+}
+
 func StartUp (env string, vite *vite.Vite)  {
+
+	StartMonitorHttp()
 
 	viteconfig.LoadConfig(env)
 	vitelog.InitLogger()
